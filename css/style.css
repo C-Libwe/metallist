@@ -142,6 +142,13 @@ header { background: #003300; color: white; }
   background: #fff;
   padding: 10px;
 }
+.price {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #B12704;        /* Amazon-style red */
+  margin: 12px 0;
+  letter-spacing: 0.5px;
+}
 .footer-items h3 { color: white; margin-bottom: 15px; }
 .footer-items a { color: #ddd; font-size: 0.9rem; line-height: 2; display: block; }
 .footer-items a:hover { text-decoration: underline; }
