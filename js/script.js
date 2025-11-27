@@ -21,7 +21,7 @@ async function loadProducts() {
              alt="${p.title}" 
              loading="lazy"
              onerror="this.src='https://via.placeholder.com/300x240/cccccc/666666.png?text=Image+Not+Found'">
-        <div class="price">$ ${parseFloat(p.price).toFixed(2)}</div>
+        <div class="price">MKW ${parseFloat(p.price).toFixed(2)}</div>
         <a href="${p.link}">Shop now →</a>
       </div>
     `).join("");
