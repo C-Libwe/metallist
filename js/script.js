@@ -1,4 +1,4 @@
-const API_URL = "https://script.google.com/macros/s/AKfycbxKOcG9dKoiI9Gffs5SvUFxpOK6NndQ0YAiryGBEZ07XD4GxOtpqADtyCkYT-YjOhtjuA/exec"; // ← Update if needed
+const API_URL = "https://script.google.com/macros/s/AKfycbzsBHfCVMC1fFCGc8dQ0WxjtOgGfO-poX7mRJI2ahtynhrsLeiSr66OdaOw6cDGUzSjFQ/exec"; // ← Update if needed
 
 const productGrid = document.getElementById("product-grid");
 
