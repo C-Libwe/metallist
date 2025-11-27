@@ -65,5 +65,47 @@
   </footer>
 
   <script src="js/cart.js"></script>
+  <!-- WhatsApp Order Now Button -->
+<div id="whatsapp-btn" style="
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  background: #25D366;
+  color: white;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transition: transform 0.3s;
+">
+  <span>💬</span>
+</div>
+<a href="https://wa.me/YOUR_PHONE_NUMBER?text=Hi%2C%20I'd%20like%20to%20order%20from%20Metallist%20Furniture!%20%0A%0AProduct%3A%20[Insert%20Product%20Name]%0ADelivery%20to%3A%20[City]%0A%0AMy%20contact%3A%20[Your%20Number]" 
+   id="whatsapp-link" 
+   target="_blank" 
+   style="display: none;">
+</a>
+
+<script>
+  const whatsappBtn = document.getElementById('whatsapp-btn');
+  const whatsappLink = document.getElementById('whatsapp-link');
+  
+  whatsappBtn.addEventListener('click', () => {
+    const productName = document.querySelector('h1')?.textContent || 'Furniture from your catalog';
+    const city = 'Lilongwe'; // Default; customize per page if needed
+    whatsappLink.href = `https://wa.me/YOUR_PHONE_NUMBER?text=Hi%2C%20I'd%20like%20to%20order%20from%20Metallist%20Furniture!%20%0A%0AProduct%3A%20${encodeURIComponent(productName)}%0ADelivery%20to%3A%20${encodeURIComponent(city)}%0A%0AMy%20contact%3A%20[Your%20Number]`;
+    whatsappLink.click();
+  });
+  
+  // Hover effect
+  whatsappBtn.addEventListener('mouseenter', () => whatsappBtn.style.transform = 'scale(1.1)');
+  whatsappBtn.addEventListener('mouseleave', () => whatsappBtn.style.transform = 'scale(1)');
+</script>
 </body>
 </html>
