@@ -1,50 +1,78 @@
-function getCart() { return JSON组件.parse(localStorage.getItem("cart") || "[]"); }
+// =============== CART SYSTEM ===============
+const cartItemsDiv = document.getElementById("cartItems");
+const cartTotalSpan = document.getElementById("cartTotal");
+const cartCount = document.getElementById("cartCount");
 
-function updateCart() {
-  const cart = getCart();
-  const itemsDiv = document.getElementById("cartItems");
-  const totalDiv = document.getElementById("cartTotal");
-
-  if (cart.length === 0) {
-    itemsDiv.innerHTML = "<p>Your cart is empty.</p>";
-    totalDiv.textContent = "Total: 0 MKW";
-    return;
-  }
-
-  itemsDiv.innerHTML = cart.map(item => `
-    <div style="display:flex;gap:20px;margin:20px 0;padding:15px;background:white;border-radius:10px;align-items:center;">
-      <img src="${item.image}" style="width:100px;height:100px;object-fit:contain;">
-      <div style="flex:1;">
-        <h3>${item.title}</h3>
-        <p>Price: ${parseFloat(item.price).toLocaleString()} MKW</p>
-        <p>Qty: ${item.qty} 
-          <button onclick="changeQty('${item.title}', 1)">+</button>
-          <button onclick="changeQty('${item.title}', -1)">-</button>
-          <button onclick="removeFromCart('${item.title}')" style="margin-left:10px;color:red;">Remove</button>
-        </p>
-      </div>
-    </div>
-  `).join("");
-
-  const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-  totalDiv.textContent = `Total: ${total.toLocaleString()} MKW`;
+// Get cart from localStorage
+function getCart() {
+  return JSON.parse(localStorage.getItem("cart") || "[]");
 }
 
-function changeQty(title, change) {
+// Save cart & update badge
+function saveCart(cart) {
+  localStorage.setItem("cart", JSON.stringify(cart));
+  const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+  cartCount.textContent = totalItems;
+}
+
+// Update quantity
+function updateQuantity(title, change) {
   let cart = getCart();
   const item = cart.find(i => i.title === title);
   if (item) {
     item.qty += change;
-    if (item.qty <= 0) cart = cart.filter(i => i.title !== title);
-    localStorage.setItem("cart", JSON.stringify(cart));
-    updateCart();
+    if (item.qty <= 0) {
+      cart = cart.filter(i => i.title !== title);
+      alert("Item removed from cart");
+    }
+    saveCart(cart);
+    renderCart();
   }
 }
 
-function removeFromCart(title) {
-  let cart = getCart().filter(i => i.title !== title);
-  localStorage.setItem("cart", JSON.stringify(cart));
-  updateCart();
+// Remove item
+function removeItem(title) {
+  if (confirm("Remove this item from cart?")) {
+    let cart = getCart();
+    cart = cart.filter(i => i.title !== title);
+    saveCart(cart);
+    renderCart();
+  }
 }
 
-updateCart();
+// Render cart items
+function renderCart() {
+  const cart = getCart();
+
+  if (cart.length === 0) {
+    cartItemsDiv.innerHTML = `
+      <p style="text-align:center;padding:80px;color:#666;font-size:1.2rem;">
+        Your cart is empty.<br><br>
+        <a href="index.html" style="color:#28a745;font-weight:600;">← Continue Shopping</a>
+      </p>`;
+    cartTotalSpan.textContent = "0 MKW";
+    return;
+  }
+
+  cartItemsDiv.innerHTML = cart.map(item => `
+    <div class="cart-item">
+      <img src="${item.image}" alt="${item.title}" onerror="this.src='https://via.placeholder.com/100?text=No+Image'">
+      <div class="cart-item-info">
+        <h3>${item.title}</h3>
+        <p class="cart-price">${parseFloat(item.price).toLocaleString()} MKW</p>
+      </div>
+      <div class="cart-actions">
+        <button onclick="updateQuantity('${item.title}', -1)">−</button>
+        <span class="qty">${item.qty}</span>
+        <button onclick="updateQuantity('${item.title}', 1)">+</button>
+        <button class="remove-btn" onclick="removeItem('${item.title}')">Remove</button>
+      </div>
+    </div>
+  `).join("");
+
+  const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+  cartTotalSpan.textContent = total.toLocaleString() + " MKW";
+}
+
+// Run on load
+renderCart();
