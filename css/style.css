@@ -67,7 +67,7 @@ header { background: #003300; color: white; position: sticky; top: 0; z-index: 1
 @media (max-width: 768px) {
   .navbar { height: auto; padding: 10px; flex-direction: row; gap: 10px; }
   .nav-search { order: 3; width: 100%; margin: 0; }
-  .cart, .sign-in, .returns { font-size: 0.9rem; }
+  .cart { font-size: 0.9rem; }
 }
 /* ==================== BANNER & HERO ==================== */
 .banner {
