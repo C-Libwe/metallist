@@ -78,7 +78,7 @@
     </div>
   </footer>
 
-  <!-- WhatsApp Floating Button -->
+  <!-- Floating WhatsApp Button (Always Visible) -->
   <div class="whatsapp-float">
     <span>WhatsApp</span>
   </div>
@@ -86,7 +86,7 @@
 
   <script src="js/cart.js"></script>
   <script>
-    // WhatsApp Button with Dynamic Delivery City
+    // WhatsApp Button — Works on Cart Page with Delivery City
     const whatsappBtn = document.querySelector('.whatsapp-float');
     const whatsappLink = document.getElementById('whatsapp-link');
     const deliveryCity = document.getElementById('deliveryCity');
@@ -100,7 +100,7 @@
 
       const message = `Hi Metallist Furniture!\n\nI'd like to place an order:\n\nItems: ${items}\nTotal: ${total}\nDelivery to: ${city}\n\nPlease contact me to confirm. Thank you!`;
 
-      whatsappLink.href = `https://wa.me/265XXXXXXXXX?text=${encodeURIComponent(message)}`;
+      whatsappLink.href = `https://wa.me/265995783419?text=${encodeURIComponent(message)}`;
       whatsappLink.click();
     });
   </script>
