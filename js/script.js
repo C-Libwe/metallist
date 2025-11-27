@@ -1,5 +1,5 @@
 // UPDATE THIS URL WITH YOUR GOOGLE APPS SCRIPT WEB APP URL
-const API_URL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
+const API_URL = "https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLjvZA5nt-WNwsumACcg8JWbG3UYFSrNgy7IxMFSHQURvtXHItmFv8pZsndP7E11UWmtJbBOAC23yJoTDzG8MVYzuIWBTvgyjYZ-JKRYW9CqhgwlkwG10slYpPR1tf0zQm-CQ_ZRV0xirDgJyirp5F9Fwtre1VwQhEPpFNHvNNwM56haaTLsiT136yzqcBVETFqv0YUidg9wTd6cyRgpTBNPh0Md7IY1d_DdwpQZR-ppBnZUTq5kvaAwF7Q1ZBP2HeZC3vqBSSGDWZtUey-08nDWbhbMXujmCqLEod6l&lib=Mvt3PtsE9hzNyhrF7BChjtY9z8IzyyUkm";
 
 const productGrid = document.getElementById("product-grid");
 
