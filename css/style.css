@@ -372,47 +372,38 @@ header { background: #003300; color: white; position: sticky; top: 0; z-index: 1
   position: fixed !important;
   bottom: 20px !important;
   right: 20px !important;
+
+  /* 25% of original size */
   background: #25D366;
   color: white;
-  padding: 12px 20px;
-  border-radius: 50px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  padding: 3px 6px;              /* 12px 24px → 3px 6px */
+  border-radius: 12.5px;         /* 50px → 12.5px */
+  box-shadow: 0 2.5px 7.5px rgba(0,0,0,0.3);  /* scaled down */
   z-index: 9999 !important;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 0.26rem;            /* 1.05rem → 0.26rem */
+
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 2.5px;                    /* 10px → 2.5px */
+
   cursor: pointer;
   transition: all 0.3s ease;
-  white-space: nowrap;
-  min-width: 140px;
-  justify-content: center;
 }
+
 .whatsapp-float::before {
-  content: "WhatsApp";
+  content: "💬";
+  font-size: 0.45rem;            /* 1.8rem → 0.45rem */
+}
+
+.whatsapp-float span {
   font-family: "Open Sans", sans-serif;
 }
-.whatsapp-float::after {
-  content: "WhatsApp";
-  font-size: 1.8rem;
-}
+
 .whatsapp-float:hover {
-  transform: translateY(-4px) scale(1.05);
+  transform: translateY(-1px) scale(1.012);  /* softer hover */
   background: #1ebe57;
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
-} 
-/* Mobile: Slightly smaller but still readable */
-@media (max-width: 480px) {
-  .whatsapp-float {
-    padding: 10px 16px;
-    font-size: 0.95rem;
-    min-width: 130px;
-    gap: 8px;
-  }
-  .whatsapp-float::after {
-    font-size: 1.6rem;
-  }
+  box-shadow: 0 3.75px 11px rgba(0,0,0,0.4);  /* scaled down */
 }
 /* ==================== CONTACT FORM ==================== */
 .contact-section {
