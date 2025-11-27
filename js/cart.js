@@ -1,24 +1,26 @@
-// =============== CART SYSTEM – FINAL FIXED VERSION ===============
+// ============== CONFIGURATION ==============
+const WHATSAPP_NUMBER = "265995783419"; // ← CHANGE TO YOUR REAL NUMBER
+
+// ============== ELEMENTS ==============
 const cartItemsDiv = document.getElementById("cartItems");
 const cartTotalSpan = document.getElementById("cartTotal");
-const cartCount = document.getElementById("cartCount");
+const cartCountElements = document.querySelectorAll("#cartCount");
+const deliveryCitySelect = document.getElementById("deliveryCity");
+const checkoutBtn = document.getElementById("checkoutBtn");
+const whatsappFloat = document.querySelector(".whatsapp-float");
+const whatsappLink = document.getElementById("whatsapp-link");
 
-// Get cart from localStorage
+// ============== CART FUNCTIONS ==============
 function getCart() {
   return JSON.parse(localStorage.getItem("cart") || "[]");
 }
 
-// Save cart & update badge EVERYWHERE
 function saveCart(cart) {
   localStorage.setItem("cart", JSON.stringify(cart));
   const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
-  // Update badge on THIS page
-  if (cartCount) cartCount.textContent = totalItems;
-  // Also update badge on other pages (index.html, detail.html) if they exist
-  document.querySelectorAll("#cartCount").forEach(el => el.textContent = totalItems);
+  cartCountElements.forEach(el => el.textContent = totalItems);
 }
 
-// Update quantity
 function updateQuantity(title, change) {
   let cart = getCart();
   const item = cart.find(i => i.title === title);
@@ -32,7 +34,6 @@ function updateQuantity(title, change) {
   }
 }
 
-// Remove item
 function removeItem(title) {
   if (confirm("Remove this item from cart?")) {
     let cart = getCart();
@@ -42,15 +43,14 @@ function removeItem(title) {
   }
 }
 
-// Render all cart items
+// ============== RENDER CART ==============
 function renderCart() {
   const cart = getCart();
 
   if (cart.length === 0) {
     cartItemsDiv.innerHTML = `
-      <p style="text-align:center;padding:80px;color:#666;font-size:1.3rem;">
-        Your cart is empty.<br><br>
-        <a href="index.html" style="color:#28a745;font-weight:600;font-size:1.1rem;">Continue Shopping</a>
+      <p class="empty-cart">
+        Your cart is empty. <a href="index.html">Continue Shopping</a>
       </p>`;
     cartTotalSpan.textContent = "0 MKW";
     return;
@@ -79,6 +79,29 @@ function renderCart() {
   cartTotalSpan.textContent = total.toLocaleString() + " MKW";
 }
 
-// =============== RUN ON PAGE LOAD ===============
-renderCart();           // Show items immediately
-saveCart(getCart());    // Update badge number right away
+// ============== WHATSAPP CHECKOUT ==============
+function sendOrderToWhatsApp() {
+  const city = deliveryCitySelect.value;
+  const total = cartTotalSpan.textContent;
+
+  const items = Array.from(document.querySelectorAll(".cart-item")).map(item => {
+    const title = item.querySelector("h3").textContent;
+    const qty = item.querySelector(".qty").textContent;
+    const subtotal = item.querySelector(".item-total").textContent;
+    return `${title} × ${qty} = ${subtotal}`;
+  }).join("\n");
+
+  const message = items
+    ? `Hi Metallist Furniture! I'd like to place this order:\n\n${items}\n\nTotal: ${total}\nDelivery to: ${city}\n\nPlease confirm and arrange delivery. Thank you!`
+    : `Hi! I'm ready to order from your catalog.\nDelivery to: ${city}\nPlease contact me.`;
+
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, "_blank");
+}
+
+// ============== EVENT LISTENERS ==============
+checkoutBtn.addEventListener("click", sendOrderToWhatsApp);
+whatsappFloat.addEventListener("click", sendOrderToWhatsApp);
+
+// ============== START ==============
+renderCart();
+saveCart(getCart()); // Update badge on load
