@@ -1,14 +1,21 @@
-const API_URL = "https://script.google.com/macros/s/AKfycbxKOcG9dKoiI9Gffs5SvUFxpOK6NndQ0YAiryGBEZ07XD4GxOtpqADtyCkYT-YjOhtjuA/exec"; // ← Update this!
+const API_URL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec"; // ← Update if needed
 
 const productGrid = document.getElementById("product-grid");
 
+// Function to format price with commas + MKW
+function formatPrice(amount) {
+  if (!amount || isNaN(amount)) return "Price on request";
+  const num = parseFloat(amount);
+  return num.toLocaleString('en-US', { minimumFractionDigits: 0 }) + " MKW";
+}
+
 async function loadProducts() {
   try {
-    const response = await fetch(API_URL + "?v=" + Date.now()); // cache buster
+    const response = await fetch(API_URL + "?t=" + Date.now());
     const products = await response.json();
 
     if (!products || products.length === 0) {
-      productGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 80px; font-size: 1.4rem; color: #666;">
+      productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:80px;font-size:1.4rem;color:#666;">
         No products yet — add some in your Google Sheet!
       </p>`;
       return;
@@ -16,20 +23,20 @@ async function loadProducts() {
 
     productGrid.innerHTML = products.map(p => `
       <div class="shop-link">
-        <h3>${p.title}</h3>
+        <h3>${p.title || "Untitled"}</h3>
         <img src="${p.image}" 
              alt="${p.title}" 
              loading="lazy"
-             onerror="this.src='https://via.placeholder.com/300x240/cccccc/666666.png?text=Image+Not+Found'">
-        <div class="price">$ ${parseFloat(p.price).toFixed(2)}</div>
-        <a href="${p.link}">Shop now →</a>
+             onerror="this.src='https://via.placeholder.com/300x240/cccccc/666?text=No+Image'">
+        <div class="price">${formatPrice(p.price)}</div>
+        <a href="${p.link}">View Details →</a>
       </div>
     `).join("");
 
   } catch (err) {
     console.error(err);
-    productGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: red;">
-      Failed to load products. Check your Apps Script URL.
+    productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:red;padding:50px;">
+      Failed to load products. Check your API URL.
     </p>`;
   }
 }
