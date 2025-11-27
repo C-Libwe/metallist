@@ -182,6 +182,7 @@ header { background: #003300; color: white; }
   line-height: 2; 
   display: block; 
 }
+.footer-items a:hover { text-decoration: underline; }
 /* ==================== PRODUCT DETAIL PAGE ==================== */
 .detail-section {
   padding: 40px 20px;
@@ -272,4 +273,3 @@ header { background: #003300; color: white; }
   .detail-price { font-size: 2rem; }
   .add-to-cart-btn { width: 100%; text-align: center; }
 }
-.footer-items a:hover { text-decoration: underline; }
