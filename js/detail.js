@@ -1,6 +1,6 @@
 // ===== CONFIGURATION — CHANGE THESE =====
-const API_URL = "https://script.google.com/macros/s/AKfycb...YOUR_FULL_ID.../exec"; // YOUR REAL URL HERE!
-const WHATSAPP_NUMBER = "265XXXXXXXXX"; // YOUR REAL WHATSAPP NUMBER
+const API_URL = "https://script.google.com/macros/s/AKfycbw0IPBkqhQQHsBWTupVWjBxSfihwqptZAxS1MSDQDa1SqW-gOh4mJdJxz8XVZ0fUqzpJA/exec"; // YOUR REAL URL HERE!
+const WHATSAPP_NUMBER = "265995783419"; // YOUR REAL WHATSAPP NUMBER
 
 // ===== ELEMENTS =====
 const detailImg = document.getElementById("detailImg");
