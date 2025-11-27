@@ -69,6 +69,16 @@ header { background: #003300; color: white; position: sticky; top: 0; z-index: 1
   .nav-search { order: 3; width: 100%; margin: 0; }
   .cart { font-size: 0.9rem; }
 }
+/* ORDERING */
+  .nav-logo { order: 1; }
+  .nav-search { 
+    order: 2;
+    flex: 1;                /* search box expands in the middle */
+    max-width: none;        /* remove desktop limit */
+    margin: 0 10px;
+    height: 40px;           /* comfortable height for mobile */
+  }
+  .cart { order: 3; }
 /* ==================== BANNER & HERO ==================== */
 .banner {
   background: #004d00;
