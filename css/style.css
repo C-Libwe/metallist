@@ -398,28 +398,54 @@ header { background: #003300; color: white; position: sticky; top: 0; z-index: 1
   color: #666;
 }
 
-/* ==================== WHATSAPP FLOATING BUTTON (ALL PAGES) ==================== */
+/* ==================== WHATSAPP FLOATING BUTTON – IMPROVED ==================== */
 .whatsapp-float {
   position: fixed !important;
   bottom: 20px !important;
   right: 20px !important;
-  width: 64px;
-  height: 64px;
   background: #25D366;
   color: white;
-  border-radius: 50%;
+  padding: 12px 20px;
+  border-radius: 50px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  z-index: 9999 !important;
+  font-weight: 600;
+  font-size: 1rem;
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 2.2rem;
+  gap: 10px;
   cursor: pointer;
-  box-shadow: 0 6
-
-  6px 20px rgba(0,0,0,0.25);
-  z-index: 9999 !important;
   transition: all 0.3s ease;
+  white-space: nowrap;
+  min-width: 140px;
+  justify-content: center;
 }
+
+.whatsapp-float::before {
+  content: "WhatsApp";
+  font-family: "Open Sans", sans-serif;
+}
+
+.whatsapp-float::after {
+  content: "WhatsApp";
+  font-size: 1.8rem;
+}
+
 .whatsapp-float:hover {
-  transform: scale(1.15);
-  box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+  transform: translateY(-4px) scale(1.05);
+  background: #1ebe57;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+}
+
+/* Mobile: Slightly smaller but still readable */
+@media (max-width: 480px) {
+  .whatsapp-float {
+    padding: 10px 16px;
+    font-size: 0.95rem;
+    min-width: 130px;
+    gap: 8px;
+  }
+  .whatsapp-float::after {
+    font-size: 1.6rem;
+  }
 }
