@@ -315,12 +315,23 @@ header { background: #003300; color: white; position: sticky; top: 0; z-index: 1
   background: #28a745;
   color: white;
   border: none;
-  padding: 16px 40px;
-  font-size: 1.4rem;
+
+  /* 25% of original padding */
+  padding: 4px 10px;          /* 16px 40px → 4px 10px */
+
+  /* 25% of original font size */
+  font-size: 0.35rem;         /* 1.4rem → 0.35rem */
+
   font-weight: 700;
-  border-radius: 12px;
+
+  /* 25% of original radius */
+  border-radius: 3px;         /* 12px → 3px */
+
   cursor: pointer;
-  margin-right: 15px;
+
+  /* 25% of original margin */
+  margin-right: 3.75px;       /* 15px → 3.75px */
+}
 }
 .checkout-btn:hover { background: #1e7e34; }
 .continue-shopping {
