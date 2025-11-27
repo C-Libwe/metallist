@@ -9,12 +9,9 @@
 </head>
 <body>
 
-  <!-- Header -->
   <header>
     <nav class="navbar">
-      <div class="nav-logo">
-        <a href="index.html"><img src="assets/logo.png" alt="Logo"></a>
-      </div>
+      <div class="nav-logo"><a href="index.html"><img src="assets/logo.png" alt="Logo"></a></div>
       <div class="nav-search">
         <input type="text" placeholder="Search products..." class="search-input">
         <div class="search-icon"><span class="material-symbols-outlined">search</span></div>
@@ -34,16 +31,11 @@
     </div>
   </header>
 
-  <!-- Cart Section -->
   <section class="cart-section">
     <div class="cart-container">
       <h1>Your Shopping Cart</h1>
-      
-      <div id="cartItems">
-        <p class="empty-cart">Your cart is empty. <a href="index.html">Continue Shopping</a></p>
-      </div>
+      <div id="cartItems"></div>
 
-      <!-- Delivery Location Selector -->
       <div class="delivery-selector">
         <label for="deliveryCity">Delivery Location:</label>
         <select id="deliveryCity">
@@ -58,11 +50,8 @@
       </div>
 
       <div class="cart-summary">
-        <div class="cart-total">
-          <strong>Subtotal:</strong>
-          <span id="cartTotal">0 MKW</span>
-        </div>
-        <button class="checkout-btn">Proceed to Checkout</button>
+        <div class="cart-total"><strong>Subtotal:</strong> <span id="cartTotal">0 MKW</span></div>
+        <button class="checkout-btn" id="checkoutBtn">Proceed to Checkout via WhatsApp</button>
         <a href="index.html" class="continue-shopping">Continue Shopping</a>
       </div>
     </div>
@@ -78,31 +67,11 @@
     </div>
   </footer>
 
-  <!-- Floating WhatsApp Button (Always Visible) -->
-  <div class="whatsapp-float">
-    <span>WhatsApp</span>
-  </div>
+  <!-- Floating WhatsApp Button -->
+  <div class="whatsapp-float"><span>WhatsApp</span></div>
   <a href="#" id="whatsapp-link" target="_blank" style="display:none;"></a>
 
+  <!-- External Scripts Only -->
   <script src="js/cart.js"></script>
-  <script>
-    // WhatsApp Button — Works on Cart Page with Delivery City
-    const whatsappBtn = document.querySelector('.whatsapp-float');
-    const whatsappLink = document.getElementById('whatsapp-link');
-    const deliveryCity = document.getElementById('deliveryCity');
-
-    whatsappBtn.addEventListener('click', () => {
-      const city = deliveryCity ? deliveryCity.value : 'Malawi';
-      const total = document.getElementById('cartTotal').textContent;
-      const items = Array.from(document.querySelectorAll('.cart-item h3'))
-        .map(h => h.textContent)
-        .join(', ') || 'View our catalog';
-
-      const message = `Hi Metallist Furniture!\n\nI'd like to place an order:\n\nItems: ${items}\nTotal: ${total}\nDelivery to: ${city}\n\nPlease contact me to confirm. Thank you!`;
-
-      whatsappLink.href = `https://wa.me/265995783419?text=${encodeURIComponent(message)}`;
-      whatsappLink.click();
-    });
-  </script>
 </body>
 </html>
