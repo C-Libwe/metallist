@@ -1,5 +1,5 @@
 // FREE Email Service — Sign up at https://www.emailjs.com (takes 2 minutes)
-emailjs.init("YOUR_PUBLIC_KEY"); // ← Get this free from EmailJS
+emailjs.init("service_0pwkpmq"); // ← Get this free from EmailJS
 
 document.getElementById("contactForm").addEventListener("submit", function(e) {
   e.preventDefault();
