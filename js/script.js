@@ -1,5 +1,5 @@
 // =============== CONFIGURATION ===============
-const API_URL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec"; // ← CHANGE THIS!
+const API_URL = "https://script.google.com/macros/s/AKfycbw0IPBkqhQQHsBWTupVWjBxSfihwqptZAxS1MSDQDa1SqW-gOh4mJdJxz8XVZ0fUqzpJA/exec"; // ← CHANGE THIS!
 let allProducts = [];  // Stores all products from Google Sheet
 
 const productGrid = document.getElementById("product-grid");
