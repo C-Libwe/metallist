@@ -398,11 +398,11 @@ header { background: #003300; color: white; position: sticky; top: 0; z-index: 1
   color: #666;
 }
 
-/* WhatsApp Floating Button */
+/* ==================== WHATSAPP FLOATING BUTTON (ALL PAGES) ==================== */
 .whatsapp-float {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
+  position: fixed !important;
+  bottom: 20px !important;
+  right: 20px !important;
   width: 64px;
   height: 64px;
   background: #25D366;
@@ -413,11 +413,13 @@ header { background: #003300; color: white; position: sticky; top: 0; z-index: 1
   justify-content: center;
   font-size: 2.2rem;
   cursor: pointer;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-  z-index: 1000;
+  box-shadow: 0 6
+
+  6px 20px rgba(0,0,0,0.25);
+  z-index: 9999 !important;
   transition: all 0.3s ease;
 }
 .whatsapp-float:hover {
-  transform: scale(1.1);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  transform: scale(1.15);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.35);
 }
