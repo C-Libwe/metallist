@@ -1,23 +1,13 @@
-const WHATSAPP_NUMBER = "265995783419"; // Your number
+const WHATSAPP_NUMBER = "265995783419";
 
-// Elements
 const cartItemsDiv = document.getElementById("cartItems");
 const cartTotalSpan = document.getElementById("cartTotal");
-const cartCountElements = document.querySelectorAll("#cartCount");
 const deliveryCitySelect = document.getElementById("deliveryCity");
 const checkoutBtn = document.getElementById("checkoutBtn");
 const whatsappFloat = document.querySelector(".whatsapp-float");
 
-// Cart Management
-function getCart() {
-  return JSON.parse(localStorage.getItem("cart") || "[]");
-}
-
-function saveCart(cart) {
-  localStorage.setItem("cart", JSON.stringify(cart));
-  const total = cart.reduce((s, i) => s + i.qty, 0);
-  cartCountElements.forEach(el => el.textContent = total);
-}
+function getCart() { return JSON.parse(localStorage.getItem("cart") || "[]"); }
+function saveCart(cart) { localStorage.setItem("cart", JSON.stringify(cart)); }
 
 function updateQuantity(title, change) {
   let cart = getCart();
@@ -39,10 +29,8 @@ function removeItem(title) {
   }
 }
 
-// Render Cart Items
 function renderCart() {
   const cart = getCart();
-
   if (cart.length === 0) {
     cartItemsDiv.innerHTML = `<p class="empty-cart">Your cart is empty. <a href="index.html">Continue Shopping</a></p>`;
     cartTotalSpan.textContent = "0 MKW";
@@ -70,7 +58,6 @@ function renderCart() {
   cartTotalSpan.textContent = total.toLocaleString() + " MKW";
 }
 
-// WhatsApp Checkout
 function sendToWhatsApp() {
   const city = deliveryCitySelect.value;
   const total = cartTotalSpan.textContent;
@@ -88,10 +75,7 @@ function sendToWhatsApp() {
   window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, "_blank");
 }
 
-// Events
 checkoutBtn.addEventListener("click", sendToWhatsApp);
 whatsappFloat.addEventListener("click", sendToWhatsApp);
 
-// Start
 renderCart();
-saveCart(getCart());
