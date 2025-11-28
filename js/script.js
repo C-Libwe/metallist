@@ -1,45 +1,27 @@
-// =============== CONFIGURATION ===============
-const API_URL = "https://script.google.com/macros/s/AKfycbw0IPBkqhQQHsBWTupVWjBxSfihwqptZAxS1MSDQDa1SqW-gOh4mJdJxz8XVZ0fUqzpJA/exec"; // ← CHANGE THIS!
-let allProducts = [];  // Stores all products from Google Sheet
+const API_URL = "https://script.google.com/macros/s/AKfycbw0IPBkqhQQHsBWTupVWjBxSfihwqptZAxS1MSDQDa1SqW-gOh4mJdJxz8XVZ0fUqzpJA/exec";
+let allProducts = [];
 
 const productGrid = document.getElementById("product-grid");
 const searchInput = document.getElementById("searchInput");
-const cartCount = document.getElementById("cartCount");
 
-// =============== PRICE FORMAT ===============
-function formatPrice(amount) {
-  if (!amount) return "Price on request";
-  return parseFloat(amount).toLocaleString('en-US') + " MKW";
-}
+// Get & save cart
+function getCart() { return JSON.parse(localStorage.getItem("cart") || "[]"); }
+function saveCart(cart) { localStorage.setItem("cart", JSON.stringify(cart)); }
 
-// =============== LOAD CART FROM LOCALSTORAGE ===============
-function getCart() {
-  return JSON.parse(localStorage.getItem("cart") || "[]");
-}
-function saveCart(cart) {
-  localStorage.setItem("cart", JSON.stringify(cart));
-  cartCount.textContent = cart.reduce((sum, item) => sum + item.qty, 0);
-}
-
-// =============== ADD TO CART ===============
+// Add to cart
 function addToCart(product) {
   let cart = getCart();
-  const existing = cart.find(item => item.title === product.title);
-  if (existing) {
-    existing.qty += 1;
-  } else {
-    cart.push({ ...product, qty: 1 });
-  }
+  const existing = cart.find(i => i.title === product.title);
+  if (existing) existing.qty += 1;
+  else cart.push({ ...product, qty: 1 });
   saveCart(cart);
   alert(`${product.title} added to cart!`);
 }
 
-// =============== DISPLAY PRODUCTS ===============
+// Display products
 function displayProducts(products) {
-  if (products.length === 0) {
-    productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:80px;color:#666;">
-      No products found. Try another search.
-    </p>`;
+  if (!products || products.length === 0) {
+    productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:80px;color:#666;">No products found.</p>`;
     return;
   }
 
@@ -48,7 +30,7 @@ function displayProducts(products) {
       <h3>${p.title}</h3>
       <img src="${p.image}" alt="${p.title}" loading="lazy"
            onerror="this.src='https://via.placeholder.com/300x240/ccc/666?text=No+Image'">
-      <div class="price">${formatPrice(p.price)}</div>
+      <div class="price">${parseFloat(p.price || 0).toLocaleString()} MKW</div>
       <button onclick="addToCart({title:'${p.title}', price:'${p.price}', image:'${p.image}'})">
         Add to Cart
       </button>
@@ -57,17 +39,15 @@ function displayProducts(products) {
   `).join("");
 }
 
-// =============== SEARCH FUNCTION ===============
+// Search
 function filterProducts() {
   const query = searchInput.value.toLowerCase().trim();
   let filtered = allProducts;
 
-  // Search by title
   if (query && !query.includes("under") && !query.includes("below")) {
     filtered = allProducts.filter(p => p.title.toLowerCase().includes(query));
   }
 
-  // Price search: "under 1000000" or "below 1 million"
   if (query.includes("under") || query.includes("below")) {
     const match = query.match(/(\d+)/);
     if (match) {
@@ -79,22 +59,18 @@ function filterProducts() {
   displayProducts(filtered);
 }
 
-// =============== LOAD PRODUCTS FROM GOOGLE SHEET ===============
+// Load products
 async function loadProducts() {
   try {
     const res = await fetch(API_URL + "?t=" + Date.now());
     allProducts = await res.json();
     displayProducts(allProducts);
-    saveCart(getCart()); // Update cart count
   } catch (err) {
-    productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:#B12704;">
-      Connection issue – retrying in 10s…
-    </p>`;
-    setTimeout(loadProducts, 10000);
+    productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:red;padding:80px;">Failed to load products. Retrying...</p>`;
+    setTimeout(loadProducts, 5000);
   }
 }
 
-// =============== START ===============
+// Start
 loadProducts();
-searchInput.addEventListener("input", filterProducts);
-setInterval(loadProducts, 120000); // Refresh every 2 mins
+searchInput?.addEventListener("input", filterProducts);
