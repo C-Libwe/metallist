@@ -570,3 +570,37 @@ header { background: #003300; color: white; position: sticky; top: 0; z-index: 1
 @media (max-width: 768px) {
   .footer-items { grid-template-columns: 1fr; padding: 30px 15px; gap: 20px; }
 }
+/* ==================== CATEGORY FILTER BUTTONS ==================== */
+.category-filters {
+  text-align: center;
+  padding: 40px 20px 20px;
+  background: #f8f9fa;
+}
+
+.cat-btn {
+  background: white;
+  border: 2px solid #ddd;
+  color: #003300;
+  padding: 12px 24px;
+  margin: 0 8px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.cat-btn:hover, .cat-btn.active {
+  background: #28a745;
+  color: white;
+  border-color: #28a745;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .cat-btn {
+    padding: 10px 16px;
+    font-size: 0.9rem;
+    margin: 4px;
+  }
+}
