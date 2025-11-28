@@ -29,29 +29,47 @@ async function loadProductDetail() {
     const params = new URLSearchParams(window.location.search);
     let requestedTitle = decodeURIComponent(params.get("title") || "").trim();
 
-    let product = products.find(p => p.title?.trim() === requestedTitle) ||
-                  products.find(p => p.title?.trim().toLowerCase().includes(requestedTitle.toLowerCase())) ||
-                  products[0];
+    let product = products.find(p => 
+      p.title?.trim().toLowerCase() === requestedTitle.toLowerCase()
+    );
+
+    if (!product && requestedTitle) {
+      product = products.find(p => 
+        p.title?.trim().toLowerCase().includes(requestedTitle.toLowerCase())
+      );
+    }
+
+    if (!product && products.length > 0) product = products[0];
 
     if (!product) throw new Error("Product not found");
 
+    // Populate with UNIQUE description from sheet
     detailImg.src = product.image || "https://via.placeholder.com/600x600/eee/666?text=No+Image";
     detailTitle.textContent = product.title;
     detailPrice.textContent = parseFloat(product.price || 0).toLocaleString() + " MKW";
-    if (product.description) detailDesc.textContent = product.description;
+    
+    // NEW: Use unique description from sheet, fallback to generic
+    detailDesc.innerHTML = product.description 
+      ? product.description.replace(/\n/g, "<br>") 
+      : "High-quality handcrafted furniture made in Malawi. Durable, stylish, and built to last.";
 
-    addToCartBtn.onclick = () => addToCart({ title: product.title, price: product.price, image: product.image });
+    addToCartBtn.onclick = () => addToCart({
+      title: product.title,
+      price: product.price,
+      image: product.image
+    });
 
     whatsappBtn.onclick = () => {
-      const msg = `Hi Metallist Furniture!\n\nI'm interested in:\n${product.title}\nPrice: ${parseFloat(product.price).toLocaleString()} MKW\n\nPlease contact me!`;
-      whatsappLink.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+      const message = `Hi Metallist Furniture!\n\nI'm interested in:\n${product.title}\nPrice: ${parseFloat(product.price).toLocaleString()} MKW\n\n${product.description ? product.description.split('\n')[0] : "Please send me details!"}\n\nContact me!`;
+      whatsappLink.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
       whatsappLink.click();
     };
 
   } catch (err) {
+    console.error(err);
     document.querySelector(".detail-container").innerHTML = `
       <div style="grid-column:1/-1;text-align:center;padding:120px;color:#B12704;">
-        <h2>Product Not Found</h2>
+        <h2>Product Not Loading</h2>
         <a href="index.html" style="color:#28a745;">Back to Shop</a>
       </div>`;
   }
