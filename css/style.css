@@ -67,11 +67,23 @@ header { background: #003300; color: white; position: sticky; top: 0; z-index: 1
   font-weight: bold;
 }
 
-/* Mobile: Stack header items */
+/* FIXED: Mobile header now shows Logo → Search Box → Cart (same as desktop) */
 @media (max-width: 768px) {
-  .navbar { height: auto; padding: 10px; flex-direction: row; gap: 10px; }
-  .nav-search { order: 3; width: 100%; margin: 0; }
-  .cart { font-size: 0.9rem; }
+  .navbar {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    gap: 10px;
+  }
+  .nav-logo { order: 1; }
+  .nav-search { 
+    order: 2; 
+    flex: 1;
+    max-width: none;
+    margin: 0 10px;
+  }
+  .cart { order: 3; }
 }
 
 /* ==================== BANNER & HERO ==================== */
@@ -96,7 +108,7 @@ header { background: #003300; color: white; position: sticky; top: 0; z-index: 1
   background: url('https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1920') center/cover no-repeat;
 }
 
-/* ==================== PRODUCT GRID – SMALL, SQUARE, CLEAN ==================== */
+/* ==================== PRODUCT GRID (UNCHANGED) ==================== */
 .shop-section { padding: 40px 15px; }
 .shop-images {
   max-width: 1400px;
@@ -105,7 +117,6 @@ header { background: #003300; color: white; position: sticky; top: 0; z-index: 1
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 20px;
 }
-
 .shop-link {
   background: white;
   border-radius: 16px;
@@ -116,19 +127,16 @@ header { background: #003300; color: white; position: sticky; top: 0; z-index: 1
   flex-direction: column;
   height: 100%;
 }
-
 .shop-link:hover {
   transform: translateY(-10px);
   box-shadow: 0 18px 40px rgba(0,0,0,0.16);
 }
-
 .shop-link img {
   width: 100%;
   height: 180px;
   object-fit: cover;
   border-bottom: 1px solid #eee;
 }
-
 .shop-link .card-content {
   padding: 14px 12px;
   flex-grow: 1;
@@ -136,7 +144,6 @@ header { background: #003300; color: white; position: sticky; top: 0; z-index: 1
   flex-direction: column;
   justify-content: space-between;
 }
-
 .shop-link h3 {
   font-size: 0.95rem;
   font-weight: 600;
@@ -148,21 +155,18 @@ header { background: #003300; color: white; position: sticky; top: 0; z-index: 1
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-
 .price {
   font-size: 1.3rem;
   font-weight: 700;
   color: #B12704;
   margin: 4px 0 10px 0;
 }
-
 .shop-link .btn-group {
   display: flex;
   flex-direction: column;
   gap: 8px;
   margin-top: auto;
 }
-
 .shop-link button,
 .shop-link a {
   padding: 9px 12px;
@@ -172,23 +176,19 @@ header { background: #003300; color: white; position: sticky; top: 0; z-index: 1
   text-align: center;
   transition: all 0.25s;
 }
-
 .shop-link button {
   background: #28a745;
   color: white;
   border: none;
   cursor: pointer;
 }
-
 .shop-link a {
   background: #f0f8f0;
   color: #28a745;
 }
-
 .shop-link button:hover { background: #1e7e34; }
 .shop-link a:hover { background: #d8f0d8; }
 
-/* Mobile: 2-column, no overlap */
 @media (max-width: 768px) {
   .shop-images {
     grid-template-columns: repeat(2, 1fr);
@@ -202,7 +202,7 @@ header { background: #003300; color: white; position: sticky; top: 0; z-index: 1
   .shop-link a { padding: 8px; font-size: 0.8rem; }
 }
 
-/* ==================== PRODUCT DETAIL PAGE ==================== */
+/* ==================== PRODUCT DETAIL PAGE – FIXED IMAGE LOADING ==================== */
 .detail-section { padding: 40px 15px; background: #f3f3f3; min-height: 80vh; }
 .detail-container {
   max-width: 1100px;
@@ -215,13 +215,18 @@ header { background: #003300; color: white; position: sticky; top: 0; z-index: 1
   grid-template-columns: 1fr 1fr;
   gap: 40px;
 }
+.detail-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  padding: 20px;
+}
 .detail-image img {
   width: 100%;
   height: auto;
   max-height: 600px;
   object-fit: contain;
-  background: #fff;
-  padding: 20px;
 }
 .detail-info {
   padding: 40px;
@@ -255,7 +260,7 @@ header { background: #003300; color: white; position: sticky; top: 0; z-index: 1
   .add-to-cart-btn { width: 100%; padding: 20px; font-size: 1.3rem; }
 }
 
-/* ==================== FOOTER ==================== */
+/* ==================== FOOTER (UNCHANGED) ==================== */
 .footer-title {
   background: #006400;
   color: white;
@@ -277,7 +282,7 @@ header { background: #003300; color: white; position: sticky; top: 0; z-index: 1
 .footer-items li a { color: #ddd; font-size: 0.875rem; }
 .footer-items li a:hover { text-decoration: underline; }
 
-/* ==================== CART PAGE ==================== */
+/* ==================== CART PAGE (UNCHANGED) ==================== */
 .cart-section {
   padding: 40px 15px;
   background: #f3f3f3;
@@ -386,7 +391,6 @@ header { background: #003300; color: white; position: sticky; top: 0; z-index: 1
   .checkout-btn { width: 100%; margin: 10px 0; }
 }
 
-/* ==================== CART PAGE - CLEAN STYLES ==================== */
 .empty-cart { text-align:center; padding:80px 20px; color:#666; font-size:1.3rem; }
 .empty-cart a { color:#28a745; font-weight:600; }
 .delivery-selector {
@@ -425,7 +429,7 @@ header { background: #003300; color: white; position: sticky; top: 0; z-index: 1
   color: white;
   padding: 12px 20px;
   border-radius: 50px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
   z-index: 9999 !important;
   font-weight: 600;
   font-size: 1rem;
@@ -445,7 +449,7 @@ header { background: #003300; color: white; position: sticky; top: 0; z-index: 1
 .whatsapp-float:hover {
   transform: translateY(-4px) scale(1.05);
   background: #1ebe57;
-  box-shadow: 0 12px 35px rgba(0,0,0,0.4);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
 }
 
 @media (max-width: 480px) {
