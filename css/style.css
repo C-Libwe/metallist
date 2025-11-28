@@ -1,13 +1,16 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap");
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: "Open Sans", sans-serif;
 }
+
 body { background: #f3f3f3; line-height: 1.6; }
 a { text-decoration: none; color: inherit; }
 a:hover { color: #ddd; }
+
 /* ==================== HEADER ==================== */
 header { background: #003300; color: white; position: sticky; top: 0; z-index: 1000; }
 .navbar {
@@ -63,22 +66,14 @@ header { background: #003300; color: white; position: sticky; top: 0; z-index: 1
   justify-content: center;
   font-weight: bold;
 }
+
 /* Mobile: Stack header items */
 @media (max-width: 768px) {
   .navbar { height: auto; padding: 10px; flex-direction: row; gap: 10px; }
   .nav-search { order: 3; width: 100%; margin: 0; }
   .cart { font-size: 0.9rem; }
 }
-/* ORDERING */
-  .nav-logo { order: 1; }
-  .nav-search { 
-    order: 2;
-    flex: 1;                /* search box expands in the middle */
-    max-width: none;        /* remove desktop limit */
-    margin: 0 10px;
-    height: 40px;           /* comfortable height for mobile */
-  }
-  .cart { order: 3; }
+
 /* ==================== BANNER & HERO ==================== */
 .banner {
   background: #004d00;
@@ -100,70 +95,113 @@ header { background: #003300; color: white; position: sticky; top: 0; z-index: 1
   min-height: 300px;
   background: url('https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1920') center/cover no-repeat;
 }
-/* ==================== PRODUCT GRID (SUPER RESPONSIVE) ==================== */
+
+/* ==================== PRODUCT GRID – SMALL, SQUARE, CLEAN ==================== */
 .shop-section { padding: 40px 15px; }
 .shop-images {
   max-width: 1400px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 20px;
 }
+
 .shop-link {
   background: white;
-  padding: 16px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  transition: all 0.3s ease;
-  text-align: center;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  transition: all 0.35s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
+
 .shop-link:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+  transform: translateY(-10px);
+  box-shadow: 0 18px 40px rgba(0,0,0,0.16);
 }
+
 .shop-link img {
   width: 100%;
-  height: 160px;
-  object-fit: contain;
-  background: #fafafa;
-  border-radius: 8px;
-  margin-bottom: 12px;
+  height: 180px;
+  object-fit: cover;
+  border-bottom: 1px solid #eee;
 }
+
+.shop-link .card-content {
+  padding: 14px 12px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 .shop-link h3 {
-  font-size: 1rem;
-  margin: 10px 0;
-  height: 48px;
-  overflow: hidden;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #003300;
+  margin: 0 0 6px 0;
+  line-height: 1.3;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  overflow: hidden;
 }
+
 .price {
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   font-weight: 700;
   color: #B12704;
-  margin: 10px 0;
+  margin: 4px 0 10px 0;
 }
-.shop-link a, .shop-link button {
+
+.shop-link .btn-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.shop-link button,
+.shop-link a {
+  padding: 9px 12px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: center;
+  transition: all 0.25s;
+}
+
+.shop-link button {
   background: #28a745;
   color: white;
-  padding: 10px 16px;
-  border-radius: 8px;
-  font-weight: 600;
-  margin: 8px 4px;
-  display: inline-block;
+  border: none;
+  cursor: pointer;
 }
-.shop-link button:hover, .shop-link a:hover { background: #1e7e34; }
-/* Tablet & Desktop: Bigger cards */
-@media (min-width: 640px) {
-  .shop-images { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 25px; }
-  .shop-link img { height: 200px; }
+
+.shop-link a {
+  background: #f0f8f0;
+  color: #28a745;
 }
-@media (min-width: 1024px) {
-  .shop-images { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; }
-  .shop-link img { height: 240px; }
-  .shop-link h3 { font-size: 1.1rem; }
+
+.shop-link button:hover { background: #1e7e34; }
+.shop-link a:hover { background: #d8f0d8; }
+
+/* Mobile: 2-column, no overlap */
+@media (max-width: 768px) {
+  .shop-images {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .shop-link img { height: 140px; }
+  .shop-link .card-content { padding: 10px 8px; }
+  .shop-link h3 { font-size: 0.9rem; }
+  .price { font-size: 1.15rem; }
+  .shop-link button,
+  .shop-link a { padding: 8px; font-size: 0.8rem; }
 }
+
 /* ==================== PRODUCT DETAIL PAGE ==================== */
 .detail-section { padding: 40px 15px; background: #f3f3f3; min-height: 80vh; }
 .detail-container {
@@ -208,7 +246,7 @@ header { background: #003300; color: white; position: sticky; top: 0; z-index: 1
 }
 .add-to-cart-btn:hover { background: #1e7e34; transform: scale(1.05); }
 .back-link { margin-top: 30px; font-size: 1.1rem; color: #28a745; font-weight: 600; }
-/* Mobile Detail Page */
+
 @media (max-width: 768px) {
   .detail-container { grid-template-columns: 1fr; }
   .detail-info { padding: 30px 20px; text-align: center; }
@@ -216,6 +254,7 @@ header { background: #003300; color: white; position: sticky; top: 0; z-index: 1
   .detail-price { font-size: 2.2rem; }
   .add-to-cart-btn { width: 100%; padding: 20px; font-size: 1.3rem; }
 }
+
 /* ==================== FOOTER ==================== */
 .footer-title {
   background: #006400;
@@ -237,6 +276,7 @@ header { background: #003300; color: white; position: sticky; top: 0; z-index: 1
 .footer-items ul { list-style: none; margin-bottom: 20px; }
 .footer-items li a { color: #ddd; font-size: 0.875rem; }
 .footer-items li a:hover { text-decoration: underline; }
+
 /* ==================== CART PAGE ==================== */
 .cart-section {
   padding: 40px 15px;
@@ -302,11 +342,11 @@ header { background: #003300; color: white; position: sticky; top: 0; z-index: 1
   text-align: center;
   font-weight: bold;
 }
-".remove-btn { 
-  background: #dc3545 !important; 
-  font-size: 0.9rem; 
-  width: auto; 
-  padding: 0 12px; }"
+.remove-btn {
+  background: #dc3545 !important;
+  font-size: 0.9rem;
+  width: auto;
+  padding: 0 12px;
 }
 .cart-summary {
   margin-top: 40px;
@@ -325,23 +365,12 @@ header { background: #003300; color: white; position: sticky; top: 0; z-index: 1
   background: #28a745;
   color: white;
   border: none;
-
-  /* 25% of original padding */
-  padding: 4px 10px;          /* 16px 40px → 4px 10px */
-
-  /* 25% of original font size */
-  font-size: 0.35rem;         /* 1.4rem → 0.35rem */
-
+  padding: 16px 40px;
+  font-size: 1.4rem;
   font-weight: 700;
-
-  /* 25% of original radius */
-  border-radius: 3px;         /* 12px → 3px */
-
+  border-radius: 12px;
   cursor: pointer;
-
-  /* 25% of original margin */
-  margin-right: 3.75px;       /* 15px → 3.75px */
-}
+  margin-right: 15px;
 }
 .checkout-btn:hover { background: #1e7e34; }
 .continue-shopping {
@@ -349,16 +378,14 @@ header { background: #003300; color: white; position: sticky; top: 0; z-index: 1
   font-weight: 600;
   font-size: 1.1rem;
 }
-/* Mobile */
+
 @media (max-width: 768px) {
-  .cart-item {
-    flex-direction: column;
-    text-align: center;
-  }
+  .cart-item { flex-direction: column; text-align: center; }
   .cart-actions { margin: 15px 0; justify-content: center; }
   .cart-summary { text-align: center; }
   .checkout-btn { width: 100%; margin: 10px 0; }
 }
+
 /* ==================== CART PAGE - CLEAN STYLES ==================== */
 .empty-cart { text-align:center; padding:80px 20px; color:#666; font-size:1.3rem; }
 .empty-cart a { color:#28a745; font-weight:600; }
@@ -388,44 +415,48 @@ header { background: #003300; color: white; position: sticky; top: 0; z-index: 1
   font-size: 0.9rem;
   color: #666;
 }
-/* ==================== WHATSAPP FLOATING BUTTON – IMPROVED ==================== */
+
+/* ==================== WHATSAPP FLOATING BUTTON ==================== */
 .whatsapp-float {
   position: fixed !important;
   bottom: 20px !important;
   right: 20px !important;
-
-  /* 25% of original size */
   background: #25D366;
   color: white;
-  padding: 3px 6px;              /* 12px 24px → 3px 6px */
-  border-radius: 12.5px;         /* 50px → 12.5px */
-  box-shadow: 0 2.5px 7.5px rgba(0,0,0,0.3);  /* scaled down */
+  padding: 12px 20px;
+  border-radius: 50px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
   z-index: 9999 !important;
   font-weight: 600;
-  font-size: 0.26rem;            /* 1.05rem → 0.26rem */
-
+  font-size: 1rem;
   display: flex;
   align-items: center;
-  gap: 2.5px;                    /* 10px → 2.5px */
-
+  gap: 10px;
   cursor: pointer;
   transition: all 0.3s ease;
+  white-space: nowrap;
+  min-width: 140px;
+  justify-content: center;
 }
-
 .whatsapp-float::before {
-  content: "💬";
-  font-size: 0.45rem;            /* 1.8rem → 0.45rem */
-}
-
-.whatsapp-float span {
+  content: "WhatsApp";
   font-family: "Open Sans", sans-serif;
 }
-
 .whatsapp-float:hover {
-  transform: translateY(-1px) scale(1.012);  /* softer hover */
+  transform: translateY(-4px) scale(1.05);
   background: #1ebe57;
-  box-shadow: 0 3.75px 11px rgba(0,0,0,0.4);  /* scaled down */
+  box-shadow: 0 12px 35px rgba(0,0,0,0.4);
 }
+
+@media (max-width: 480px) {
+  .whatsapp-float {
+    padding: 10px 16px;
+    font-size: 0.95rem;
+    min-width: 130px;
+    gap: 8px;
+  }
+}
+
 /* ==================== CONTACT FORM ==================== */
 .contact-section {
   padding: 60px 20px;
@@ -495,52 +526,8 @@ header { background: #003300; color: white; position: sticky; top: 0; z-index: 1
   font-size: 1.1rem;
 }
 .contact-info p { margin: 12px 0; }
-/* ==================== WHATSAPP FLOATING BUTTON – FIXED & IMPROVED ==================== */
-.whatsapp-float {
-  position: fixed !important;
-  bottom: 20px !important;
-  right: 20px !important;
-  background: #25D366;
-  color: white;
-  padding: 3px 6px;              /* 12px 24px → 3px 6px */
-  border-radius: 12.5px;         /* 50px → 12.5px */
-  box-shadow: 0 2.5px 7.5px rgba(0,0,0,0.3);  /* scaled down */
-  z-index: 9999 !important;
-  font-weight: 600;
-  font-size: 0.26rem;            /* 1.05rem → 0.26rem */  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
 
-.whatsapp-float::before {
-  content: "💬";
-  font-size: 1.8rem;
-}
-
-.whatsapp-float span {
-  content: "WhatsApp";
-  font-family: "Open Sans", sans-serif;
-}
-
-.whatsapp-float:hover {
-  transform: translateY(-4px) scale(1.05);
-  background: #1ebe57;
-  box-shadow: 0 15px 45px rgba(0,0,0,0.4);
-}
-
-/* Mobile: Smaller for better fit */
-@media (max-width: 480px) {
-  .whatsapp-float {
-    padding: 10px 18px;
-    font-size: 0.95rem;
-    gap: 8px;
-  }
-  .whatsapp-float::before { font-size: 1.6rem; }
-}
-
-/* ==================== BACK TO TOP BUTTON – STYLED ==================== */
+/* ==================== BACK TO TOP ==================== */
 .footer-title {
   background: #006400;
   color: white;
@@ -554,7 +541,6 @@ header { background: #003300; color: white; position: sticky; top: 0; z-index: 1
   display: inline-block;
   margin: 20px auto;
 }
-
 .footer-title:hover {
   background: #004d00;
   transform: translateY(-4px);
@@ -574,124 +560,9 @@ header { background: #003300; color: white; position: sticky; top: 0; z-index: 1
   text-align: center;
   font-size: 0.95rem;
 }
-
-.footer-items h3 {
-  color: white;
-  font-size: 1.15rem;
-  margin-bottom: 16px;
-}
-
-.footer-items a {
-  display: block;
-  padding: 8px 0;
-  color: #ccc;
-  transition: color 0.3s;
-}
-
-.footer-items a:hover { color: white; text-decoration: underline; }
-
-@media (max-width: 768px) {
-  .footer-items { grid-template-columns: 1fr; padding: 30px 15px; gap: 20px; }
-}
-
-/* ==================== CART PAGE ==================== */
-.cart-section { padding: 60px 20px; background: #f3f3f3; min-height: 80vh; }
-.cart-container { max-width: 1200px; margin: 0 auto; background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-.cart-container h1 { font-size: 2.4rem; color: #003300; text-align: center; margin-bottom: 40px; }
-.cart-item { display: flex; align-items: center; gap: 25px; padding: 25px 0; border-bottom: 1px solid #eee; }
-.cart-item img { width: 110px; height: 110px; object-fit: contain; border-radius: 12px; background: #fafafa; }
-.cart-item-info h3 { font-size: 1.3rem; margin-bottom: 10px; }
-.cart-price { font-size: 1.4rem; font-weight: 700; color: #B12704; }
-.cart-actions { margin-left: auto; display: flex; align-items: center; gap: 14px; }
-.cart-actions button { width: 40px; height: 40px; border: none; background: #28a745; color: white; font-size: 1.5rem; border-radius: 50%; cursor: pointer; }
-.remove-btn { background: #dc3545 !important; font-size: 1rem; width: auto; padding: 0 16px; height: 40px; border-radius: 50px; }
-.item-total { font-size: 1.4rem; font-weight: 700; color: #003300; margin-left: 30px; }
-
-.delivery-selector { margin: 40px 0; padding: 25px; background: #f0f8f0; border-radius: 16px; }
-.delivery-selector label { font-weight: 600; color: #003300; margin-bottom: 12px; display: block; }
-#deliveryCity { width: 100%; padding: 14px; border: 2px solid #ddd; border-radius: 12px; font-size: 1.05rem; }
-
-.cart-summary { margin-top: 50px; padding: 30px; background: #f0f8f0; border-radius: 16px; text-align: right; }
-.cart-total { font-size: 2rem; font-weight: 700; color: #003300; margin-bottom: 20px; }
-.checkout-btn { background: #28a745; color: white; padding: 18px 50px; font-size: 1.5rem; border: none; border-radius: 50px; cursor: pointer; font-weight: 700; }
-.checkout-btn:hover { background: #1e7e34; }
-
-@media (max-width: 768px) {
-  .cart-item { flex-direction: column; text-align: center; }
-  .cart-actions, .item-total { margin: 20px 0; }
-  .cart-summary { text-align: center; }
-  .checkout-btn { width: 100%; }
-}
-
-/* ==================== CONTACT PAGE ==================== */
-.contact-section { padding: 80px 20px; background: #f3f3f3; min-height: 80vh; }
-.contact-container { max-width: 900px; margin: 0 auto; background: white; padding: 50px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; }
-.contact-container h1 { font-size: 2.8rem; color: #003300; margin-bottom: 24px; }
-.contact-container p { font-size: 1.2rem; color: #666; margin-bottom: 50px; }
-.form-group { margin-bottom: 30px; text-align: left; }
-.form-group label { display: block; margin-bottom: 12px; font-weight: 600; color: #003300; }
-.form-group input, .form-group textarea { width: 100%; padding: 18px; border: 2px solid #ddd; border-radius: 16px; font-size: 1.1rem; transition: border 0.3s; }
-.form-group input:focus, .form-group textarea:focus { outline: none; border-color: #28a745; }
-.submit-btn { background: #28a745; color: white; padding: 20px 80px; font-size: 1.5rem; border: none; border-radius: 50px; cursor: pointer; font-weight: 700; transition: 0.4s; }
-.submit-btn:hover { background: #1e7e34; transform: scale(1.05); }
-.contact-info { margin-top: 60px; padding: 40px; background: #f0f8f0; border-radius: 16px; font-size: 1.2rem; }
-
-@media (max-width: 768px) {
-  .contact-container { padding: 40px 30px; }
-  .submit-btn { width: 100%; padding: 18px; }
-}
-
-/* ==================== BACK TO TOP – STYLED ==================== */
-.footer-title {
-  background: #006400;
-  color: white;
-  padding: 14px 28px;
-  border-radius: 50px;
-  font-size: 1.05rem;
-  font-weight: 600;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-  cursor: pointer;
-  transition: all 0.3s;
-  display: inline-block;
-  margin: 20px auto;
-}
-
-.footer-title:hover {
-  background: #004d00;
-  transform: translateY(-4px);
-  box-shadow: 0 12px 30px rgba(0,0,0,0.3);
-}
-
-/* ==================== FOOTER – SMALLER SIZE ==================== */
-.footer-items {
-  background: #004d00;
-  padding: 40px 20px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 30px;
-  max-width: 1400px;
-  margin: 0 auto;
-  color: #ddd;
-  text-align: center;
-  font-size: 0.95rem;
-}
-
 .footer-items h3 { color: white; font-size: 1.15rem; margin-bottom: 16px; }
 .footer-items a { display: block; padding: 8px 0; color: #ccc; transition: color 0.3s; }
 .footer-items a:hover { color: white; text-decoration: underline; }
-
 @media (max-width: 768px) {
   .footer-items { grid-template-columns: 1fr; padding: 30px 15px; gap: 20px; }
 }
-```
-
-**Done!**  
-- Footer smaller & compact  
-- All pages consistent  
-- Mobile product cards fixed (no overlap)  
-
-Your Metallist Furniture store is now **100% perfect**.
-
-Say **“Launch!”** and I’ll give you a **100% free live domain** + Facebook setup.
-
-Let’s go live!
