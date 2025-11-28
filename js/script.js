@@ -30,8 +30,8 @@ function addToCart(product) {
 function displayProducts(products) {
   if (!products || products.length === 0) {
     productGrid.innerHTML = `
-      <p style="grid-column:1/-1;text-align:center;padding:100px;color:#666;font-size:1.3rem;">
-        No products found.
+      <p style="grid-column:1/-1;text-align:center;padding:80px;color:#666;font-size:1.3rem;">
+        No products found. Check your Google Sheet.
       </p>`;
     return;
   }
@@ -50,41 +50,6 @@ function displayProducts(products) {
       </div>
     </div>
   `).join("");
-}
-
-// =============== CATEGORY FILTERS (NEW FEATURE) ===============
-function createCategoryFilters() {
-  const filterContainer = document.createElement("div");
-  filterContainer.className = "category-filters";
-  filterContainer.innerHTML = `
-    <button data-category="all" class="cat-btn active">All</button>
-    <button data-category="table" class="cat-btn">Tables</button>
-    <button data-category="bed" class="cat-btn">Beds</button>
-    <button data-category="door" class="cat-btn">Doors</button>
-    <button data-category="sofa" class="cat-btn">Sofas</button>
-    <button data-category="other" class="cat-btn">Other</button>
-  `;
-  productGrid.before(filterContainer);
-
-  filterContainer.addEventListener("click", (e) => {
-    const btn = e.target.closest(".cat-btn");
-    if (!btn) return;
-
-    // Update active state
-    filterContainer.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-
-    const category = btn.dataset.category;
-    let filtered = allProducts;
-
-    if (category !== "all") {
-      filtered = allProducts.filter(p => 
-        p.title?.toLowerCase().includes(category)
-      );
-    }
-
-    displayProducts(filtered);
-  });
 }
 
 // =============== SEARCH FUNCTION ===============
@@ -111,19 +76,28 @@ function filterProducts() {
 async function loadProducts() {
   try {
     const res = await fetch(API_URL + "?t=" + Date.now());
+    if (!res.ok) {
+      throw new Error(`API Error: ${res.status} — Redeploy your Google Apps Script as Web App`);
+    }
     allProducts = await res.json();
+
+    if (!Array.isArray(allProducts) || allProducts.length === 0) {
+      throw new Error("No products in sheet — add data to row 2+");
+    }
+
     displayProducts(allProducts);
-    createCategoryFilters(); // Create buttons after products load
   } catch (err) {
+    console.error("Home page error:", err);
     productGrid.innerHTML = `
       <p style="grid-column:1/-1;text-align:center;padding:100px;color:#B12704;">
-        Failed to load products. Retrying in 5s...
+        Failed to load products.<br>
+        <small>${err.message}</small><br>
+        <a href="#" onclick="loadProducts()" style="color:#28a745;">Retry</a>
       </p>`;
-    setTimeout(loadProducts, 5000);
   }
 }
 
 // =============== START ===============
 loadProducts();
 searchInput?.addEventListener("input", filterProducts);
-setInterval(loadProducts, 120000); // Refresh every 2 mins
+setInterval(loadProducts, 120000);
