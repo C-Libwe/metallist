@@ -6,22 +6,14 @@ const productGrid = document.getElementById("product-grid");
 const searchInput = document.getElementById("searchInput");
 
 // =============== CART FUNCTIONS ===============
-function getCart() {
-  return JSON.parse(localStorage.getItem("cart") || "[]");
-}
-function saveCart(cart) {
-  localStorage.setItem("cart", JSON.stringify(cart));
-}
+function getCart() { return JSON.parse(localStorage.getItem("cart") || "[]"); }
+function saveCart(cart) { localStorage.setItem("cart", JSON.stringify(cart)); }
 
-// Add to cart
 function addToCart(product) {
   let cart = getCart();
   const existing = cart.find(i => i.title === product.title);
-  if (existing) {
-    existing.qty += 1;
-  } else {
-    cart.push({ ...product, qty: 1 });
-  }
+  if (existing) existing.qty += 1;
+  else cart.push({ ...product, qty: 1 });
   saveCart(cart);
   alert(`${product.title} added to cart!`);
 }
@@ -29,10 +21,7 @@ function addToCart(product) {
 // =============== DISPLAY PRODUCTS ===============
 function displayProducts(products) {
   if (!products || products.length === 0) {
-    productGrid.innerHTML = `
-      <p style="grid-column:1/-1;text-align:center;padding:80px;color:#666;font-size:1.3rem;">
-        No products found. Check your Google Sheet.
-      </p>`;
+    productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:100px;color:#666;">No products found.</p>`;
     return;
   }
 
@@ -43,16 +32,53 @@ function displayProducts(products) {
            onerror="this.src='https://via.placeholder.com/300x240/ccc/666?text=No+Image'">
       <div class="price">${parseFloat(p.price || 0).toLocaleString()} MKW</div>
       <div class="btn-group">
-        <button onclick="addToCart({title:'${p.title}', price:'${p.price}', image:'${p.image}'})">
-          Add to Cart
-        </button>
-        <a href="product-detail.html?title=${encodeURIComponent(p.title)}">View Details →</a>
+        <button onclick="addToCart({title:'${p.title}', price:'${p.price}', image:'${p.image}'})">Add to Cart</button>
+        <a href="product-detail.html?title=${encodeURIComponent(p.title)}">View Details</a>
       </div>
     </div>
   `).join("");
 }
 
-// =============== SEARCH FUNCTION ===============
+// =============== CATEGORY FILTERS — FIXED & ALWAYS VISIBLE ===============
+function createCategoryFilters() {
+  // Remove old filters if exist
+  document.querySelector(".category-filters")?.remove();
+
+  const filterDiv = document.createElement("div");
+  filterDiv.className = "category-filters";
+  filterDiv.innerHTML = `
+    <button data-category="all" class="cat-btn active">All</button>
+    <button data-category="table" class="cat-btn">Tables</button>
+    <button data-category="bed" class="cat-btn">Beds</button>
+    <button data-category="door" class="cat-btn">Doors</button>
+    <button data-category="sofa" class="cat-btn">Sofas</button>
+    <button data-category="wardrobe" class="cat-btn">Wardrobes</button>
+    <button data-category="other" class="cat-btn">Other</button>
+  `;
+  productGrid.before(filterDiv);
+
+  filterDiv.addEventListener("click", (e) => {
+    const btn = e.target.closest(".cat-btn");
+    if (!btn) return;
+
+    filterDiv.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+
+    const category = btn.dataset.category;
+    let filtered = allProducts;
+
+    if (category !== "all") {
+      filtered = allProducts.filter(p => 
+        p.category?.toLowerCase() === category || 
+        p.title?.toLowerCase().includes(category)
+      );
+    }
+
+    displayProducts(filtered);
+  });
+}
+
+// =============== SEARCH ===============
 function filterProducts() {
   const query = searchInput.value.toLowerCase().trim();
   let filtered = allProducts;
@@ -68,7 +94,6 @@ function filterProducts() {
       filtered = allProducts.filter(p => p.title.toLowerCase().includes(query));
     }
   }
-
   displayProducts(filtered);
 }
 
@@ -76,24 +101,20 @@ function filterProducts() {
 async function loadProducts() {
   try {
     const res = await fetch(API_URL + "?t=" + Date.now());
-    if (!res.ok) {
-      throw new Error(`API Error: ${res.status} — Redeploy your Google Apps Script as Web App`);
-    }
+    if (!res.ok) throw new Error("Check your Google Apps Script deployment");
     allProducts = await res.json();
 
     if (!Array.isArray(allProducts) || allProducts.length === 0) {
-      throw new Error("No products in sheet — add data to row 2+");
+      productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:100px;color:#666;">No products in sheet — add data!</p>`;
+      return;
     }
 
     displayProducts(allProducts);
+    createCategoryFilters(); // ← Now always runs after products load
+
   } catch (err) {
-    console.error("Home page error:", err);
-    productGrid.innerHTML = `
-      <p style="grid-column:1/-1;text-align:center;padding:100px;color:#B12704;">
-        Failed to load products.<br>
-        <small>${err.message}</small><br>
-        <a href="#" onclick="loadProducts()" style="color:#28a745;">Retry</a>
-      </p>`;
+    console.error(err);
+    productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:100px;color:#B12704;">Failed to load products.<br><small>${err.message}</small></p>`;
   }
 }
 
