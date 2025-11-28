@@ -8,13 +8,9 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 <body>
-
-  <!-- Header -->
   <header>
     <nav class="navbar">
-      <div class="nav-logo">
-        <a href="index.html"><img src="assets/logo.png" alt="Logo"></a>
-      </div>
+      <div class="nav-logo"><a href="index.html"><img src="assets/logo.png" alt="Logo"></a></div>
       <div class="nav-search">
         <input type="text" placeholder="Search products..." class="search-input">
         <div class="search-icon"><span class="material-symbols-outlined">search</span></div>
@@ -27,18 +23,12 @@
         <p>Cart</p>
       </div>
     </nav>
-    <div class="banner">
-      <div class="banner-content">
-        <div class="panel"><span class="material-symbols-outlined">menu</span><a href="index.html">All</a></div>
-      </div>
-    </div>
   </header>
 
-  <!-- Product Detail Section -->
   <section class="detail-section">
     <div class="detail-container">
       <div class="detail-image">
-        <img id="detailImg" src="https://via.placeholder.com/500x500/eee/666?text=Loading..." alt="Product">
+        <img id="detailImg" src="https://via.placeholder.com/600x600/eee/666?text=Loading..." alt="Loading">
       </div>
       <div class="detail-info">
         <h1 id="detailTitle">Loading product...</h1>
@@ -46,9 +36,7 @@
         <p class="detail-desc" id="detailDesc">
           High-quality handcrafted furniture made in Malawi. Durable, stylish, and built to last.
         </p>
-        <button class="add-to-cart-btn" id="addToCartBtn">
-          Add to Cart
-        </button>
+        <button class="add-to-cart-btn" id="addToCartBtn">Add to Cart</button>
         <a href="index.html" class="back-link">Back to Shop</a>
       </div>
     </div>
@@ -59,19 +47,18 @@
     <div class="footer-items">
       <ul><h3>Get to Know Us</h3><li><a href="#">About Us</a></li></ul>
       <ul><h3>Connect</h3><li><a href="https://facebook.com/vincent.chilibwe/">Facebook</a></li></ul>
-      <ul><h3>Make Money</h3><li><a href="#">Earn a commission by advertising our products</a></li></ul>
+      <ul><h3>Make Money</h3><li><a href="#">Earn a commission</a></li></ul>
       <ul><h3>Help</h3><li><a href="contact.html">Contact</a></li></ul>
     </div>
   </footer>
 
   <!-- WhatsApp Button + Hidden Link -->
-<div class="whatsapp-float"><span></span></div>
-<a href="#" id="whatsapp-link" target="_blank" style="display:none;"></a>
+  <div class="whatsapp-float"><span>WhatsApp</span></div>
+  <a href="#" id="whatsapp-link" target="_blank" style="display:none;"></a>
 
-<!-- Shared WhatsApp Script -->
-<script src="js/whatsapp.js"></script>
-
-  <!-- External JavaScript -->
+  <!-- Shared Scripts -->
   <script src="js/detail.js"></script>
+  <script src="js/whatsapp.js"></script>
+  <script src="js/cart-sync.js"></script>
 </body>
 </html>
