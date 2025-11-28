@@ -604,3 +604,15 @@ header { background: #003300; color: white; position: sticky; top: 0; z-index: 1
     margin: 4px;
   }
 }
+/* Stock Badge (optional) */
+.stock-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #28a745;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: bold;
+}
