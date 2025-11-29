@@ -636,3 +636,50 @@ header { background: #003300; color: white; position: sticky; top: 0; z-index: 1
 @media (max-width: 768px) {
   .image-container { height: 140px; }
 }
+/* ==================== FILTER & SORT BAR ==================== */
+.category-filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 20px 10px;
+  background: #f8f9fa;
+  gap: 16px;
+}
+
+.filter-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.cat-btn {
+  background: white;
+  border: 2px solid #ddd;
+  color: #003300;
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.cat-btn.active, .cat-btn:hover {
+  background: #28a745;
+  color: white;
+  border-color: #28a745;
+}
+
+.sort-select {
+  padding: 12px 20px;
+  border: 2px solid #ddd;
+  border-radius: 50px;
+  font-size: 1rem;
+  background: white;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .category-filters { flex-direction: column; align-items: stretch; }
+  .sort-select { width: 100%; }
+}
