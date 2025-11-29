@@ -18,38 +18,35 @@ function addToCart(product) {
   alert(`${product.title} added to cart!`);
 }
 
-// =============== DISPLAY PRODUCTS — USES COLUMNS A–D ONLY ===============
+// =============== DISPLAY PRODUCTS ===============
 function displayProducts(products) {
   if (!products || products.length === 0) {
     productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:100px;color:#666;">No products found.</p>`;
     return;
   }
 
-  productGrid.innerHTML = products.map(row => {
-    const title = (row[0] || "Untitled").toString().trim();
-    const image = (row[1] || "https://via.placeholder.com/300x240/ccc/666?text=No+Image").toString().trim();
-    const link = (row[2] || "#").toString().trim();
-    const price = parseFloat(row[3] || 0);
-    const category = (row[5] || "other").toString().trim().toLowerCase();
+  productGrid.innerHTML = products.map(p => {
+    const title = p[0] || "Untitled";
+    const image = p[1] || "https://via.placeholder.com/300x240/ccc/666?text=No+Image";
+    const price = parseFloat(p[3] || 0);
+    const category = (p[5] || "other").toString().toLowerCase().trim();
 
     return `
       <div class="shop-link" data-category="${category}">
+        <h3>${title}</h3>
         <img src="${image}" alt="${title}" loading="lazy"
              onerror="this.src='https://via.placeholder.com/300x240/ccc/666?text=No+Image'">
-        <h3>${title}</h3>
         <div class="price">${price.toLocaleString()} MKW</div>
-        <div class="btn-group">
-          <button onclick="addToCart({title:'${title.replace(/'/g, "\\'")}', price:'${price}', image:'${image}'})">
-            Add to Cart
-          </button>
-          <a href="product-detail.html?title=${encodeURIComponent(title)}">View Details</a>
-        </div>
+        <button onclick="addToCart({title:'${title}', price:'${price}', image:'${image}'})">
+          Add to Cart
+        </button>
+        <a href="product-detail.html?title=${encodeURIComponent(title)}">View Details →</a>
       </div>
     `;
   }).join("");
 }
 
-// =============== CATEGORY FILTERS — USES COLUMN F ONLY ===============
+// =============== CATEGORY FILTERS — NOW USES COLUMN F ===============
 function createCategoryFilters() {
   document.querySelector(".category-filters")?.remove();
 
@@ -77,7 +74,7 @@ function createCategoryFilters() {
 
     document.querySelectorAll(".shop-link").forEach(card => {
       const cat = card.dataset.category;
-      card.style.display = (selected === "all" || cat === selected) ? "block" : "none";
+      card.style.display = (selected === "all" || cat === selected || cat.includes(selected)) ? "block" : "none";
     });
   });
 }
@@ -100,7 +97,7 @@ async function loadProducts() {
     allProducts = await res.json();
 
     if (!Array.isArray(allProducts) || allProducts.length === 0) {
-      productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:100px;color:#666;">Add products to your sheet!</p>`;
+      productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:100px;color:#666;">No products in sheet.</p>`;
       return;
     }
 
