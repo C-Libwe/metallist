@@ -501,3 +501,34 @@ footer {
   margin: 8px 0;
   padding: 0;
 }
+/* ==================== BACK TO TOP – CLEAN LINED BOX ==================== */
+.footer-title {
+  display: inline-block !important;
+  background: transparent;
+  color: #111;
+  border: 2px solid #111;
+  padding: 12px 28px;
+  border-radius: 50px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  margin: 20px auto;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.footer-title:hover {
+  background: #111;
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .footer-title {
+    padding: 10px 24px;
+    font-size: 0.9rem;
+  }
+}
