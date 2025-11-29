@@ -1,5 +1,5 @@
 // =============== CONFIGURATION ===============
-const API_URL = "https://script.google.com/macros/s/AKfycbw0IPBkqhQQHsBWTupVWjBxSfihwqptZAxS1MSDQDa1SqW-gOh4mJdJxz8XVZ0fUqzpJA/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwXS0GSFmKnzHIplECt3vUs1yzSebsi2g_rJKsYN3SjfQOl8sdutLdl68mvmT_eXXmlqg/exec";
 let allProducts = [];
 
 const productGrid = document.getElementById("product-grid");
