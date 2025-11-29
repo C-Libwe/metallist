@@ -31,49 +31,81 @@ function displayProducts(products) {
       <img src="${p.image}" alt="${p.title}" loading="lazy"
            onerror="this.src='https://via.placeholder.com/300x240/ccc/666?text=No+Image'">
       <div class="price">${parseFloat(p.price || 0).toLocaleString()} MKW</div>
-      <button onclick="addToCart({title:'${p.title}', price:'${p.price}', image:'${p.image}'})">
-        Add to Cart
-      </button>
-      <a href="product-detail.html?title=${encodeURIComponent(p.title)}">View Details →</a>
+      <div class="btn-group">
+        <button onclick="addToCart({title:'${p.title}', price:'${p.price}', image:'${p.image}'})">
+          Add to Cart
+        </button>
+        <a href="product-detail.html?title=${encodeURIComponent(p.title)}">View Details →</a>
+      </div>
     </div>
   `).join("");
 }
 
-// =============== CATEGORY FILTERS — BY KEYWORDS IN TITLE (Column A) ===============
+// =============== CATEGORY FILTERS + PRICE SORTING ===============
 function createCategoryFilters() {
   document.querySelector(".category-filters")?.remove();
 
   const filterDiv = document.createElement("div");
   filterDiv.className = "category-filters";
   filterDiv.innerHTML = `
-    <button data-category="all" class="cat-btn active">All</button>
-    <button data-category="table" class="cat-btn">Tables</button>
-    <button data-category="bed" class="cat-btn">Beds</button>
-    <button data-category="door" class="cat-btn">Doors</button>
-    <button data-category="sofa" class="cat-btn">Sofas</button>
-    <button data-category="wardrobe" class="cat-btn">Wardrobes</button>
-    <button data-category="other" class="cat-btn">Other</button>
+    <div class="filter-group">
+      <button data-category="all" class="cat-btn active">All</button>
+      <button data-category="table" class="cat-btn">Tables</button>
+      <button data-category="bed" class="cat-btn">Beds</button>
+      <button data-category="door" class="cat-btn">Doors</button>
+      <button data-category="sofa" class="cat-btn">Sofas</button>
+      <button data-category="other" class="cat-btn">Other</button>
+    </div>
+
+    <select id="sortSelect" class="sort-select">
+      <option value="default">Sort by</option>
+      <option value="price-low">Price: Low to High</option>
+      <option value="price-high">Price: High to Low</option>
+    </select>
   `;
   productGrid.before(filterDiv);
 
-  filterDiv.addEventListener("click", (e) => {
-    const btn = e.target.closest(".cat-btn");
-    if (!btn) return;
+  const sortSelect = filterDiv.querySelector("#sortSelect");
 
-    filterDiv.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
+  function applyFiltersAndSort() {
+    const activeBtn = filterDiv.querySelector(".cat-btn.active");
+    const category = activeBtn ? activeBtn.dataset.category : "all";
+    const sortValue = sortSelect.value;
 
-    const category = btn.dataset.category;
     let filtered = allProducts;
 
+    // Category filter
     if (category !== "all") {
       filtered = allProducts.filter(p => 
         p.title?.toLowerCase().includes(category)
       );
     }
 
+    // Price sorting
+    if (sortValue === "price-low") {
+      filtered.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+    } else if (sortValue === "price-high") {
+      filtered.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+    }
+
     displayProducts(filtered);
+  }
+
+  // Category buttons
+  filterDiv.addEventListener("click", (e) => {
+    const btn = e.target.closest(".cat-btn");
+    if (!btn) return;
+
+    filterDiv.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    applyFiltersAndSort();
   });
+
+  // Sort dropdown
+  sortSelect.addEventListener("change", applyFiltersAndSort);
+
+  // Initial load
+  applyFiltersAndSort();
 }
 
 // =============== SEARCH ===============
@@ -105,7 +137,7 @@ async function loadProducts() {
     createCategoryFilters();
     saveCart(getCart());
   } catch (err) {
-    productGrid.innerHTML = `<p style="grid-column:1/-1;text-align, color:red;padding:80px;">Failed to load products. Retrying...</p>`;
+    productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:red;padding:80px;">Failed to load products. Retrying...</p>`;
     setTimeout(loadProducts, 10000);
   }
 }
