@@ -5,7 +5,7 @@ let allProducts = [];
 const productGrid = document.getElementById("product-grid");
 const searchInput = document.getElementById("searchInput");
 
-// =============== CART ===============
+// =============== CART FUNCTIONS ===============
 function getCart() { return JSON.parse(localStorage.getItem("cart") || "[]"); }
 function saveCart(cart) { localStorage.setItem("cart", JSON.stringify(cart)); }
 
@@ -18,27 +18,35 @@ function addToCart(product) {
   alert(`${product.title} added to cart!`);
 }
 
-// =============== DISPLAY PRODUCTS — 100% FIXED ===============
+// =============== DISPLAY PRODUCTS — BULLETPROOF IMAGE LOADING ===============
 function displayProducts(products) {
   if (!products || products.length === 0) {
-    productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:100px;color:#666;">No products found.</p>`;
+    productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:100px;color:#666;font-size:1.2rem;">No products found.</p>`;
     return;
   }
 
   productGrid.innerHTML = products.map(row => {
-    const title = row[0]?.toString().trim() || "Untitled";
-    const image = row[1]?.toString().trim() || "https://via.placeholder.com/300x240/ccc/666?text=No+Image";
+    const title = row[0]?.toString().trim() || "Untitled Product";
+    const rawImage = row[1]?.toString().trim();
     const price = parseFloat(row[3] || 0);
     const category = (row[5]?.toString().trim() || "other").toLowerCase();
 
+    // Double fallback image
+    const fallbackImage = "https://via.placeholder.com/300x240/eeeeee/999999?text=No+Image";
+    const finalImage = rawImage && rawImage.includes("http") ? rawImage : fallbackImage;
+
     return `
       <div class="shop-link" data-category="${category}">
-        <img src="${image}" alt="${title}" loading="lazy"
-             onerror="this.src='https://via.placeholder.com/300x240/ccc/666?text=No+Image'">
+        <div class="image-container">
+          <img src="${finalImage}" 
+               alt="${title}" 
+               loading="lazy"
+               onerror="this.onerror=null; this.src='${fallbackImage}'; this.style.opacity='0.8';">
+        </div>
         <h3>${title}</h3>
         <div class="price">${price.toLocaleString()} MKW</div>
         <div class="btn-group">
-          <button onclick="addToCart({title:'${title.replace(/'/g, "\\'")}', price:'${price}', image:'${image}'})">
+          <button onclick="addToCart({title:'${title.replace(/'/g, "\\'")}', price:'${price}', image:'${finalImage}'})">
             Add to Cart
           </button>
           <a href="product-detail.html?title=${encodeURIComponent(title)}">View Details</a>
@@ -48,7 +56,7 @@ function displayProducts(products) {
   }).join("");
 }
 
-// =============== CATEGORY FILTERS — WORKS PERFECTLY ===============
+// =============== CATEGORY FILTERS — WORKS WITH COLUMN F ===============
 function createCategoryFilters() {
   document.querySelector(".category-filters")?.remove();
 
@@ -91,20 +99,15 @@ function filterProducts() {
   });
 }
 
-// =============== LOAD PRODUCTS — WITH DEBUG ===============
+// =============== LOAD PRODUCTS ===============
 async function loadProducts() {
   try {
-    console.log("Fetching products...");
     const res = await fetch(API_URL + "?t=" + Date.now());
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-    const data = await res.json();
-    console.log("Raw data from sheet:", data);
-
-    allProducts = data;
+    if (!res.ok) throw new Error("Check Google Apps Script Web App URL");
+    allProducts = await res.json();
 
     if (!Array.isArray(allProducts) || allProducts.length === 0) {
-      productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:100px;color:#666;">Sheet is empty — add products!</p>`;
+      productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:100px;color:#666;">Add products to your Google Sheet!</p>`;
       return;
     }
 
@@ -112,12 +115,8 @@ async function loadProducts() {
     createCategoryFilters();
 
   } catch (err) {
-    console.error("Load failed:", err);
-    productGrid.innerHTML = `
-      <p style="grid-column:1/-1;text-align:center;padding:100px;color:#B12704;">
-        Failed to load products.<br>
-        Open console (F12) → send me the error.
-      </p>`;
+    console.error("Load error:", err);
+    productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:100px;color:#B12704;">Failed to load products.<br>Please check your connection.</p>`;
   }
 }
 
