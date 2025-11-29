@@ -466,6 +466,26 @@ header {
 }
 
 /* ==================== FOOTER – NO BULLET POINTS ==================== */
+.footer-title {
+  background: #f8f8f8;
+  color: #111;
+  padding: 12px 28px;
+  border: 2px solid #111;
+  border-radius: 50px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-block;
+  margin: 20px auto;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.footer-title:hover {
+  background: #111;
+  color: white;
+  transform: translateY(-3px);
+}
 .footer-items {
   background: #ffffff;
   padding: 50px 40px;
