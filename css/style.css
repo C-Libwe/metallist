@@ -1,9 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
 
-/* ============================================
-   COMPLETE CSS FILE — COMPACT LAYOUT + WHATSAPP ICON
-   ============================================ */
-
 * {
   margin: 0;
   padding: 0;
@@ -22,9 +18,9 @@ body {
 a { text-decoration: none; color: inherit; }
 a:hover { color: #222; }
 img { max-width: 100%; display: block; }
-
-button, a, input, select, textarea {
-  font-size: 0.82rem !important;
+button, input, select, textarea {
+  font-size: 0.82rem;
+  font-family: inherit;
 }
 
 /* ==================== HEADER ==================== */
@@ -125,9 +121,9 @@ header {
   background: white;
   border: 1.5px solid #ccc;
   color: #333;
-  padding: 6px 14px !important;
+  padding: 6px 14px;
   border-radius: 50px;
-  font-size: 0.76rem !important;
+  font-size: 0.76rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.25s;
@@ -148,7 +144,7 @@ header {
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 18px !important;
+  gap: 18px;
   justify-items: center;
 }
 
@@ -176,17 +172,17 @@ header {
 }
 
 .shop-link .card-content {
-  padding: 10px !important;
+  padding: 10px;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
 }
 
 .shop-link h3 {
-  font-size: 0.86rem !important;
+  font-size: 0.86rem;
   font-weight: 600;
   color: #111;
-  margin: 0 0 4px 0 !important;
+  margin: 0 0 4px 0;
   line-height: 1.35;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -195,16 +191,16 @@ header {
 }
 
 .price {
-  font-size: 1rem !important;
+  font-size: 1rem;
   font-weight: 700;
   color: #111;
-  margin: 4px 0 8px !important;
+  margin: 4px 0 8px 0;
 }
 
 .shop-link .short-desc {
-  font-size: 0.72rem !important;
+  font-size: 0.72rem;
   color: #666;
-  margin-bottom: 10px !important;
+  margin-bottom: 10px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -220,9 +216,9 @@ header {
 .shop-link button,
 .shop-link a {
   flex: 1;
-  padding: 6px 10px !important;
-  border-radius: 6px !important;
-  font-size: 0.76rem !important;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.76rem;
   font-weight: 600;
   text-align: center;
   transition: all 0.25s;
@@ -252,13 +248,13 @@ header {
 }
 
 @media (max-width: 768px) {
-  .shop-images { grid-template-columns: repeat(2, 1fr); gap: 16px !important; }
-  .shop-link img { height: 160px !important; }
-  .shop-link .card-content { padding: 8px !important; }
-  .shop-link h3 { font-size: 0.78rem !important; }
-  .price { font-size: 0.95rem !important; }
-  .short-desc { font-size: 0.7rem !important; }
-  .shop-link button, .shop-link a { padding: 5px 8px !important; font-size: 0.72rem !important; }
+  .shop-images { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .shop-link img { height: 160px; }
+  .shop-link .card-content { padding: 8px; }
+  .shop-link h3 { font-size: 0.78rem; }
+  .price { font-size: 0.95rem; }
+  .short-desc { font-size: 0.7rem; }
+  .shop-link button, .shop-link a { padding: 5px 8px; font-size: 0.72rem; }
 }
 
 /* ==================== PRODUCT DETAIL PAGE ==================== */
@@ -279,7 +275,7 @@ header {
 .detail-image img { max-height: 600px; object-fit: contain; }
 
 .detail-info {
-  padding: 30px !important;
+  padding: 30px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -294,10 +290,10 @@ header {
   background: transparent;
   color: #111;
   border: 2px solid #111;
-  padding: 10px 22px !important;
-  font-size: 0.88rem !important;
+  padding: 10px 22px;
+  font-size: 0.88rem;
   font-weight: 600;
-  border-radius: 30px !important;
+  border-radius: 30px;
   cursor: pointer;
   transition: all 0.3s;
 }
@@ -325,9 +321,7 @@ header {
   padding: 30px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
-
 .cart-container h1 { font-size: 1.8rem; color: #111; text-align: center; margin-bottom: 30px; }
-
 .cart-item {
   display: flex;
   align-items: center;
@@ -335,7 +329,6 @@ header {
   padding: 16px 0;
   border-bottom: 1px solid #eee;
 }
-
 .cart-item img {
   width: 80px;
   height: 80px;
@@ -343,17 +336,14 @@ header {
   border-radius: 10px;
   background: #fafafa;
 }
-
 .cart-item-info h3 { font-size: 1rem; margin-bottom: 6px; }
 .cart-price { font-size: 1.1rem; font-weight: 700; color: #B12704; }
-
 .cart-actions {
   margin-left: auto;
   display: flex;
   align-items: center;
   gap: 8px;
 }
-
 .cart-actions button {
   width: 30px;
   height: 30px;
@@ -365,12 +355,10 @@ header {
   cursor: pointer;
   transition: all 0.25s;
 }
-
 .cart-actions button:hover {
   background: #111;
   color: white;
 }
-
 .remove-btn {
   background: transparent !important;
   color: #dc3545 !important;
@@ -380,22 +368,19 @@ header {
   height: 30px;
   border-radius: 50px;
 }
-
 .item-total { font-size: 1.1rem; font-weight: 700; color: #111; margin-left: 16px; }
-
 .delivery-selector { margin: 30px 0; padding: 16px; background: #f0f8f0; border-radius: 10px; }
 #deliveryCity { width: 100%; padding: 10px; border: 1.5px solid #ddd; border-radius: 8px; font-size: 0.95rem; }
-
 .cart-summary { margin-top: 30px; padding: 20px; background: #f0f8f0; border-radius: 10px; text-align: right; }
 .cart-total { font-size: 1.5rem; font-weight: 700; color: #111; margin-bottom: 16px; }
 .checkout-btn {
   background: transparent;
   color: #111;
   border: 2px solid #111;
-  padding: 10px 22px !important;
-  font-size: 0.88rem !important;
+  padding: 10px 22px;
+  font-size: 0.88rem;
   font-weight: 600;
-  border-radius: 30px !important;
+  border-radius: 30px;
   cursor: pointer;
   transition: all 0.3s;
 }
@@ -403,7 +388,6 @@ header {
   background: #111;
   color: white;
 }
-
 @media (max-width: 768px) {
   .cart-item { flex-direction: column; text-align: center; }
   .cart-actions, .item-total { margin: 12px 0; }
@@ -439,10 +423,10 @@ header {
   background: transparent;
   color: #111;
   border: 2px solid #111;
-  padding: 10px 22px !important;
-  font-size: 0.88rem !important;
+  padding: 10px 22px;
+  font-size: 0.88rem;
   font-weight: 600;
-  border-radius: 30px !important;
+  border-radius: 30px;
   cursor: pointer;
   transition: all 0.3s;
 }
@@ -459,26 +443,23 @@ header {
   right: 16px !important;
   background: #25D366;
   color: white;
-  padding: 8px 14px !important;
-  border-radius: 40px !important;
+  padding: 8px 14px;
+  border-radius: 40px;
   display: flex;
   align-items: center;
   gap: 6px;
   box-shadow: 0 6px 18px rgba(0,0,0,0.25);
-  font-size: 0.78rem !important;
-  font-weight: 500 !important;
+  font-size: 0.78rem;
+  font-weight: 500;
   cursor: pointer;
   transition: 0.25s ease;
 }
-
-.whatsapp-float::before { content: "" !important; }
-
+.whatsapp-float::before { content: "WhatsApp"; }
 .whatsapp-float svg {
-  width: 18px !important;
-  height: 18px !important;
-  fill: white !important;
+  width: 18px;
+  height: 18px;
+  fill: white;
 }
-
 .whatsapp-float:hover {
   background: #1ebe57 !important;
   transform: scale(1.05) translateY(-3px) !important;
@@ -488,30 +469,26 @@ header {
 footer {
   background: #f8f8f8;
   border-top: 1px solid #e5e5e5;
-  padding: 35px 20px 25px !important;
+  padding: 35px 20px 25px;
   margin-top: 60px;
 }
-
 .footer-items {
   max-width: 1400px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)) !important;
-  gap: 20px !important;
-  color: #777 !important;
-  font-size: 0.78rem !important;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 20px;
+  color: #777;
+  font-size: 0.78rem;
 }
-
 .footer-items h3 {
   color: #111;
-  font-size: 0.88rem !important;
-  margin-bottom: 10px !important;
-  font-weight: 600 !important;
+  font-size: 0.88rem;
+  margin-bottom: 10px;
+  font-weight: 600;
 }
-
-.footer-items a { font-size: 0.78rem !important; line-height: 1.4; }
+.footer-items a { font-size: 0.78rem; line-height: 1.4; }
 .footer-items a:hover { color: #111; }
-
 @media (max-width: 768px) {
-  .footer-items { grid-template-columns: 1fr; text-align: center !important; gap: 16px !important; }
+  .footer-items { grid-template-columns: 1fr; text-align: center; gap: 16px; }
 }
