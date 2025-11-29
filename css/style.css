@@ -492,3 +492,12 @@ footer {
 @media (max-width: 768px) {
   .footer-items { grid-template-columns: 1fr; text-align: center; gap: 16px; }
 }
+/* ==================== FOOTER – REMOVE BULLET POINTS ==================== */
+.footer-items ul {
+  list-style: none !important;
+}
+
+.footer-items li {
+  margin: 8px 0;
+  padding: 0;
+}
