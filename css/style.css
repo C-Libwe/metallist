@@ -324,8 +324,8 @@ header {
 .cart-item {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 16px 0;
+  gap: 20px;
+  padding: 20px 0;
   border-bottom: 1px solid #eee;
 }
 .cart-item img {
@@ -337,37 +337,46 @@ header {
 }
 .cart-item-info h3 { font-size: 1rem; margin-bottom: 6px; }
 .cart-price { font-size: 1.1rem; font-weight: 700; color: #B12704; }
+/* ==================== CART PAGE – SQUARE +/- BUTTONS & NO REMOVE ==================== */
 .cart-actions {
   margin-left: auto;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
 }
+
 .cart-actions button {
-  width: 30px;
-  height: 30px;
-  border: 1.5px solid #111;
-  background: transparent;
+  width: 38px;
+  height: 38px;
+  border: 2px solid #111;
+  background: white;
   color: #111;
-  font-size: 1rem;
-  border-radius: 50%;
+  font-size: 1.4rem;
+  font-weight: bold;
+  border-radius: 8px !important;
   cursor: pointer;
   transition: all 0.25s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 .cart-actions button:hover {
   background: #111;
   color: white;
 }
-.remove-btn {
-  background: transparent !important;
-  color: #dc3545 !important;
-  border-color: #dc3545 !important;
-  font-size: 0.78rem;
-  padding: 0 10px;
-  height: 30px;
-  border-radius: 50px;
+
+.cart-actions .qty {
+  min-width: 40px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.1rem;
 }
-.item-total { font-size: 1.1rem; font-weight: 700; color: #111; margin-left: 16px; }
+
+/* Remove the "Remove" button completely */
+.remove-btn {
+  display: none !important;
+}.item-total { font-size: 1.1rem; font-weight: 700; color: #111; margin-left: 16px; }
 .delivery-selector { margin: 30px 0; padding: 16px; background: #f0f8f0; border-radius: 10px; }
 #deliveryCity { width: 100%; padding: 10px; border: 1.5px solid #ddd; border-radius: 8px; font-size: 0.95rem; }
 .cart-summary { margin-top: 30px; padding: 20px; background: #f0f8f0; border-radius: 10px; text-align: right; }
