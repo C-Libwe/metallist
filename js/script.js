@@ -18,31 +18,37 @@ function addToCart(product) {
   alert(`${product.title} added to cart!`);
 }
 
-// =============== DISPLAY PRODUCTS — FIXED FOR ARRAY FORMAT ===============
+// =============== DISPLAY PRODUCTS — WORKS WITH ARRAY FORMAT ===============
 function displayProducts(products) {
   if (!products || products.length === 0) {
-    productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:100px;color:#666;">No products found.</p>`;
+    productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:100px;color:#666;font-size:1.3rem;">No products found.</p>`;
     return;
   }
 
-  productGrid.innerHTML = products.map(p => `
-    <div class="shop-link">
-      <h3>${p[0] || "Untitled"}</h3>
-      <img src="${p[1] || 'https://via.placeholder.com/300x240/ccc/666?text=No+Image'}" 
-           alt="${p[0]}" loading="lazy"
-           onerror="this.src='https://via.placeholder.com/300x240/ccc/666?text=No+Image'">
-      <div class="price">${parseFloat(p[3] || 0).toLocaleString()} MKW</div>
-      <div class="btn-group">
-        <button onclick="addToCart({title:'${p[0]}', price:'${p[3] || 0}', image:'${p[1]}'})">
-          Add to Cart
-        </button>
-        <a href="product-detail.html?title=${encodeURIComponent(p[0])}">View Details</a>
+  productGrid.innerHTML = products.map(row => {
+    const title = row[0] || "Untitled";
+    const image = row[1] || "https://via.placeholder.com/300x240/ccc/666?text=No+Image";
+    const price = parseFloat(row[3] || 0);
+    const category = (row[5] || "").toString().toLowerCase();
+
+    return `
+      <div class="shop-link" data-category="${category}">
+        <h3>${title}</h3>
+        <img src="${image}" alt="${title}" loading="lazy"
+             onerror="this.src='https://via.placeholder.com/300x240/ccc/666?text=No+Image'">
+        <div class="price">${price.toLocaleString()} MKW</div>
+        <div class="btn-group">
+          <button onclick="addToCart({title:'${title}', price:'${price}', image:'${image}'})">
+            Add to Cart
+          </button>
+          <a href="product-detail.html?title=${encodeURIComponent(title)}">View Details</a>
+        </div>
       </div>
-    </div>
-  `).join("");
+    `;
+  }).join("");
 }
 
-// =============== CATEGORY FILTERS — WORKS WITH COLUMN F ===============
+// =============== CATEGORY FILTERS — 100% WORKING WITH COLUMN F ===============
 function createCategoryFilters() {
   document.querySelector(".category-filters")?.remove();
 
@@ -66,37 +72,26 @@ function createCategoryFilters() {
     filterDiv.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
 
-    const cat = btn.dataset.category;
-    let filtered = allProducts;
+    const selected = btn.dataset.category;
 
-    if (cat !== "all") {
-      filtered = allProducts.filter(p => {
-        const category = (p[5] || "").toString().trim().toLowerCase();
-        return category === cat || category.includes(cat);
-      });
-    }
-
-    displayProducts(filtered);
+    document.querySelectorAll(".shop-link").forEach(card => {
+      const cat = card.dataset.category;
+      if (selected === "all" || cat.includes(selected)) {
+        card.style.display = "block";
+      } else {
+        card.style.display = "none";
+      }
+    });
   });
 }
 
 // =============== SEARCH ===============
 function filterProducts() {
   const query = searchInput.value.toLowerCase().trim();
-  let filtered = allProducts;
-
-  if (query) {
-    if (query.includes("under") || query.includes("below")) {
-      const match = query.match(/(\d+)/);
-      if (match) {
-        const maxPrice = parseInt(match[0]) * (query.includes("million") ? 1000000 : 1000);
-        filtered = allProducts.filter(p => parseFloat(p[3]) <= maxPrice);
-      }
-    } else {
-      filtered = allProducts.filter(p => p[0]?.toLowerCase().includes(query));
-    }
-  }
-  displayProducts(filtered);
+  document.querySelectorAll(".shop-link").forEach(card => {
+    const title = card.querySelector("h3").textContent.toLowerCase();
+    card.style.display = title.includes(query) ? "block" : "none";
+  });
 }
 
 // =============== LOAD PRODUCTS ===============
@@ -107,7 +102,7 @@ async function loadProducts() {
     allProducts = await res.json();
 
     if (!Array.isArray(allProducts) || allProducts.length === 0) {
-      productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:100px;color:#666;">No products in sheet — add data!</p>`;
+      productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:100px;color:#666;">Add products to your Google Sheet!</p>`;
       return;
     }
 
@@ -116,7 +111,7 @@ async function loadProducts() {
 
   } catch (err) {
     console.error(err);
-    productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:100px;color:#B12704;">Failed to load products.<br><small>${err.message}</small></p>`;
+    productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:100px;color:#B12704;">Failed to load.<br>Check your API URL.</p>`;
   }
 }
 
