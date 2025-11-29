@@ -49,14 +49,13 @@ async function loadProductDetail() {
 
     if (!product) throw new Error("Product not found");
 
-    // SUCCESS — Populate
     detailImg.src = product.image || "https://via.placeholder.com/600x600/eee/666?text=No+Image";
     detailImg.alt = product.title;
     detailTitle.textContent = product.title;
     detailPrice.textContent = parseFloat(product.price || 0).toLocaleString() + " MKW";
 
-    // FIXED: Only uses real description from Column E — no default text
-    detailDesc.textContent = product.description?.trim() || "No description available.";
+    // REPLACED — Now uses real description from Column E only
+    detailDesc.textContent = (product.description || "").trim() || "No description available.";
 
     addToCartBtn.onclick = () => addToCart({
       title: product.title,
@@ -64,12 +63,13 @@ async function loadProductDetail() {
       image: product.image
     });
 
+    // REPLACED — WhatsApp uses real description
     whatsappBtn.onclick = () => {
-      const descPreview = product.description 
-        ? product.description.split('\n')[0].substring(0, 100) + "..."
-        : "Please send me details!";
-      
-      const message = `Hi Metallist Furniture!\n\nI'm interested in:\n${product.title}\nPrice: ${parseFloat(product.price).toLocaleString()} MKW\n\n${descPreview}\n\nContact me!`;
+      const descPreview = (product.description || "").trim()
+        ? (product.description.split('\n')[0].substring(0, 120) + "...")
+        : "Please send me more details!";
+       
+      const message = `Hi Metallist Furniture!\n\nI'm interested in:\n${product.title}\nPrice: ${parseFloat(product.price || 0).toLocaleString()} MKW\n\n${descPreview}\n\nPlease contact me!`;
       whatsappLink.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
       whatsappLink.click();
     };
