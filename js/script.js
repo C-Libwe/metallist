@@ -18,7 +18,7 @@ function addToCart(product) {
   alert(`${product.title} added to cart!`);
 }
 
-// =============== DISPLAY PRODUCTS ===============
+// =============== DISPLAY PRODUCTS — FIXED FOR ARRAY FORMAT ===============
 function displayProducts(products) {
   if (!products || products.length === 0) {
     productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:100px;color:#666;">No products found.</p>`;
@@ -27,21 +27,22 @@ function displayProducts(products) {
 
   productGrid.innerHTML = products.map(p => `
     <div class="shop-link">
-      <h3>${p[0]}</h3>
-      <img src="${p[1]}" alt="${p[0]}" loading="lazy"
+      <h3>${p[0] || "Untitled"}</h3>
+      <img src="${p[1] || 'https://via.placeholder.com/300x240/ccc/666?text=No+Image'}" 
+           alt="${p[0]}" loading="lazy"
            onerror="this.src='https://via.placeholder.com/300x240/ccc/666?text=No+Image'">
       <div class="price">${parseFloat(p[3] || 0).toLocaleString()} MKW</div>
       <div class="btn-group">
-        <button onclick="addToCart({title:'${p[0]}', price:'${p[3]}', image:'${p[1]}'})">
+        <button onclick="addToCart({title:'${p[0]}', price:'${p[3] || 0}', image:'${p[1]}'})">
           Add to Cart
         </button>
-        <a href="product-detail.html?title=${encodeURIComponent(p[0])}">View Details →</a>
+        <a href="product-detail.html?title=${encodeURIComponent(p[0])}">View Details</a>
       </div>
     </div>
   `).join("");
 }
 
-// =============== CATEGORY FILTERS — FIXED FOR COLUMN F ===============
+// =============== CATEGORY FILTERS — WORKS WITH COLUMN F ===============
 function createCategoryFilters() {
   document.querySelector(".category-filters")?.remove();
 
@@ -92,7 +93,7 @@ function filterProducts() {
         filtered = allProducts.filter(p => parseFloat(p[3]) <= maxPrice);
       }
     } else {
-      filtered = allProducts.filter(p => p[0].toLowerCase().includes(query));
+      filtered = allProducts.filter(p => p[0]?.toLowerCase().includes(query));
     }
   }
   displayProducts(filtered);
@@ -111,7 +112,7 @@ async function loadProducts() {
     }
 
     displayProducts(allProducts);
-    createCategoryFilters(); // ← Always creates buttons
+    createCategoryFilters();
 
   } catch (err) {
     console.error(err);
