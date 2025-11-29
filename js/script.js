@@ -27,21 +27,22 @@ function displayProducts(products) {
 
   productGrid.innerHTML = products.map(p => `
     <div class="shop-link">
-      <h3>${p.title}</h3>
-      <img src="${p.image}" alt="${p.title}" loading="lazy"
+      <h3>${p[0]}</h3>
+      <img src="${p[1]}" alt="${p[0]}" loading="lazy"
            onerror="this.src='https://via.placeholder.com/300x240/ccc/666?text=No+Image'">
-      <div class="price">${parseFloat(p.price || 0).toLocaleString()} MKW</div>
+      <div class="price">${parseFloat(p[3] || 0).toLocaleString()} MKW</div>
       <div class="btn-group">
-        <button onclick="addToCart({title:'${p.title}', price:'${p.price}', image:'${p.image}'})">Add to Cart</button>
-        <a href="product-detail.html?title=${encodeURIComponent(p.title)}">View Details</a>
+        <button onclick="addToCart({title:'${p[0]}', price:'${p[3]}', image:'${p[1]}'})">
+          Add to Cart
+        </button>
+        <a href="product-detail.html?title=${encodeURIComponent(p[0])}">View Details →</a>
       </div>
     </div>
   `).join("");
 }
 
-// =============== CATEGORY FILTERS — FIXED & ALWAYS VISIBLE ===============
+// =============== CATEGORY FILTERS — FIXED FOR COLUMN F ===============
 function createCategoryFilters() {
-  // Remove old filters if exist
   document.querySelector(".category-filters")?.remove();
 
   const filterDiv = document.createElement("div");
@@ -64,14 +65,14 @@ function createCategoryFilters() {
     filterDiv.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
 
-    const category = btn.dataset.category;
+    const cat = btn.dataset.category;
     let filtered = allProducts;
 
-    if (category !== "all") {
-      filtered = allProducts.filter(p => 
-        p.category?.toLowerCase() === category || 
-        p.title?.toLowerCase().includes(category)
-      );
+    if (cat !== "all") {
+      filtered = allProducts.filter(p => {
+        const category = (p[5] || "").toString().trim().toLowerCase();
+        return category === cat || category.includes(cat);
+      });
     }
 
     displayProducts(filtered);
@@ -88,10 +89,10 @@ function filterProducts() {
       const match = query.match(/(\d+)/);
       if (match) {
         const maxPrice = parseInt(match[0]) * (query.includes("million") ? 1000000 : 1000);
-        filtered = allProducts.filter(p => parseFloat(p.price) <= maxPrice);
+        filtered = allProducts.filter(p => parseFloat(p[3]) <= maxPrice);
       }
     } else {
-      filtered = allProducts.filter(p => p.title.toLowerCase().includes(query));
+      filtered = allProducts.filter(p => p[0].toLowerCase().includes(query));
     }
   }
   displayProducts(filtered);
@@ -101,7 +102,7 @@ function filterProducts() {
 async function loadProducts() {
   try {
     const res = await fetch(API_URL + "?t=" + Date.now());
-    if (!res.ok) throw new Error("Check your Google Apps Script deployment");
+    if (!res.ok) throw new Error("Check Google Apps Script deployment");
     allProducts = await res.json();
 
     if (!Array.isArray(allProducts) || allProducts.length === 0) {
@@ -110,7 +111,7 @@ async function loadProducts() {
     }
 
     displayProducts(allProducts);
-    createCategoryFilters(); // ← Now always runs after products load
+    createCategoryFilters(); // ← Always creates buttons
 
   } catch (err) {
     console.error(err);
