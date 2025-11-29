@@ -25,13 +25,11 @@ function addToCart(product) {
 async function loadProductDetail() {
   try {
     const res = await fetch(API_URL + "?t=" + Date.now());
-    if (!res.ok) {
-      throw new Error(`API Error: ${res.status} - Check your Google Apps Script deployment`);
-    }
-    const products = await res.json();
+    if (!res.ok) throw new Error(`API Error: ${res.status}`);
 
+    const products = await res.json();
     if (!Array.isArray(products) || products.length === 0) {
-      throw new Error("No products in sheet — add data to row 2+");
+      throw new Error("No products in sheet");
     }
 
     const params = new URLSearchParams(window.location.search);
@@ -47,17 +45,18 @@ async function loadProductDetail() {
       );
     }
 
-    if (!product && products.length > 0) {
-      product = products[0];
-    }
+    if (!product && products.length > 0) product = products[0];
 
     if (!product) throw new Error("Product not found");
 
+    // SUCCESS — Populate
     detailImg.src = product.image || "https://via.placeholder.com/600x600/eee/666?text=No+Image";
     detailImg.alt = product.title;
     detailTitle.textContent = product.title;
     detailPrice.textContent = parseFloat(product.price || 0).toLocaleString() + " MKW";
-    detailDesc.textContent = product.description || "High-quality handcrafted furniture made in Malawi. Durable, stylish, and built to last.";
+
+    // FIXED: Only uses real description from Column E — no default text
+    detailDesc.textContent = product.description?.trim() || "No description available.";
 
     addToCartBtn.onclick = () => addToCart({
       title: product.title,
@@ -66,7 +65,11 @@ async function loadProductDetail() {
     });
 
     whatsappBtn.onclick = () => {
-      const message = `Hi Metallist Furniture!\n\nI'm interested in:\n${product.title}\nPrice: ${parseFloat(product.price).toLocaleString()} MKW\n\n${product.description ? product.description.split('\n')[0] : "Please send details!"}\n\nContact me!`;
+      const descPreview = product.description 
+        ? product.description.split('\n')[0].substring(0, 100) + "..."
+        : "Please send me details!";
+      
+      const message = `Hi Metallist Furniture!\n\nI'm interested in:\n${product.title}\nPrice: ${parseFloat(product.price).toLocaleString()} MKW\n\n${descPreview}\n\nContact me!`;
       whatsappLink.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
       whatsappLink.click();
     };
@@ -76,7 +79,7 @@ async function loadProductDetail() {
     document.querySelector(".detail-container").innerHTML = `
       <div style="grid-column:1/-1;text-align:center;padding:120px;color:#B12704;">
         <h2>Product Not Loading</h2>
-        <p>${err.message}</p>
+        <p>Please check your connection and try again.</p>
         <a href="index.html" style="color:#28a745;font-weight:600;">Back to Shop</a>
       </div>`;
   }
