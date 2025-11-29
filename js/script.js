@@ -5,7 +5,7 @@ let allProducts = [];
 const productGrid = document.getElementById("product-grid");
 const searchInput = document.getElementById("searchInput");
 
-// =============== CART ===============
+// =============== CART FUNCTIONS ===============
 function getCart() { return JSON.parse(localStorage.getItem("cart") || "[]"); }
 function saveCart(cart) { localStorage.setItem("cart", JSON.stringify(cart)); }
 
@@ -25,28 +25,21 @@ function displayProducts(products) {
     return;
   }
 
-  productGrid.innerHTML = products.map(p => {
-    const title = p[0] || "Untitled";
-    const image = p[1] || "https://via.placeholder.com/300x240/ccc/666?text=No+Image";
-    const price = parseFloat(p[3] || 0);
-    const category = (p[5] || "other").toString().toLowerCase().trim();
-
-    return `
-      <div class="shop-link" data-category="${category}">
-        <h3>${title}</h3>
-        <img src="${image}" alt="${title}" loading="lazy"
-             onerror="this.src='https://via.placeholder.com/300x240/ccc/666?text=No+Image'">
-        <div class="price">${price.toLocaleString()} MKW</div>
-        <button onclick="addToCart({title:'${title}', price:'${price}', image:'${image}'})">
-          Add to Cart
-        </button>
-        <a href="product-detail.html?title=${encodeURIComponent(title)}">View Details →</a>
-      </div>
-    `;
-  }).join("");
+  productGrid.innerHTML = products.map(p => `
+    <div class="shop-link">
+      <h3>${p.title || "Untitled"}</h3>
+      <img src="${p.image}" alt="${p.title}" loading="lazy"
+           onerror="this.src='https://via.placeholder.com/300x240/ccc/666?text=No+Image'">
+      <div class="price">${parseFloat(p.price || 0).toLocaleString()} MKW</div>
+      <button onclick="addToCart({title:'${p.title}', price:'${p.price}', image:'${p.image}'})">
+        Add to Cart
+      </button>
+      <a href="product-detail.html?title=${encodeURIComponent(p.title)}">View Details →</a>
+    </div>
+  `).join("");
 }
 
-// =============== CATEGORY FILTERS — NOW USES COLUMN F ===============
+// =============== CATEGORY FILTERS — BY KEYWORDS IN TITLE (Column A) ===============
 function createCategoryFilters() {
   document.querySelector(".category-filters")?.remove();
 
@@ -70,43 +63,50 @@ function createCategoryFilters() {
     filterDiv.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
 
-    const selected = btn.dataset.category;
+    const category = btn.dataset.category;
+    let filtered = allProducts;
 
-    document.querySelectorAll(".shop-link").forEach(card => {
-      const cat = card.dataset.category;
-      card.style.display = (selected === "all" || cat === selected || cat.includes(selected)) ? "block" : "none";
-    });
+    if (category !== "all") {
+      filtered = allProducts.filter(p => 
+        p.title?.toLowerCase().includes(category)
+      );
+    }
+
+    displayProducts(filtered);
   });
 }
 
 // =============== SEARCH ===============
 function filterProducts() {
   const query = searchInput.value.toLowerCase().trim();
+  let filtered = allProducts;
 
-  document.querySelectorAll(".shop-link").forEach(card => {
-    const title = card.querySelector("h3").textContent.toLowerCase();
-    card.style.display = title.includes(query) ? "block" : "none";
-  });
+  if (query) {
+    if (query.includes("under") || query.includes("below")) {
+      const match = query.match(/(\d+)/);
+      if (match) {
+        const maxPrice = parseInt(match[0]) * (query.includes("million") ? 1000000 : 1000);
+        filtered = allProducts.filter(p => parseFloat(p.price) <= maxPrice);
+      }
+    } else {
+      filtered = allProducts.filter(p => p.title.toLowerCase().includes(query));
+    }
+  }
+  displayProducts(filtered);
 }
 
 // =============== LOAD PRODUCTS ===============
 async function loadProducts() {
   try {
     const res = await fetch(API_URL + "?t=" + Date.now());
-    if (!res.ok) throw new Error("Check Google Apps Script");
+    if (!res.ok) throw new Error("Network error");
     allProducts = await res.json();
-
-    if (!Array.isArray(allProducts) || allProducts.length === 0) {
-      productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:100px;color:#666;">No products in sheet.</p>`;
-      return;
-    }
-
     displayProducts(allProducts);
     createCategoryFilters();
-
+    saveCart(getCart());
   } catch (err) {
-    console.error(err);
-    productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:100px;color:#B12704;">Failed to load products.</p>`;
+    productGrid.innerHTML = `<p style="grid-column:1/-1;text-align, color:red;padding:80px;">Failed to load products. Retrying...</p>`;
+    setTimeout(loadProducts, 10000);
   }
 }
 
