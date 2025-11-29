@@ -26,7 +26,7 @@ function displayProducts(products) {
   }
 
   productGrid.innerHTML = products.map(p => `
-    <div class="shop-link">
+    <div class="shop-link" data-category="${p.category || 'other'}">
       <h3>${p.title || "Untitled"}</h3>
       <img src="${p.image}" alt="${p.title}" loading="lazy"
            onerror="this.src='https://via.placeholder.com/300x240/ccc/666?text=No+Image'">
@@ -41,7 +41,7 @@ function displayProducts(products) {
   `).join("");
 }
 
-// =============== CATEGORY FILTERS + PRICE SORTING ===============
+// =============== CATEGORY FILTERS — NOW USES COLUMN F (category) ===============
 function createCategoryFilters() {
   document.querySelector(".category-filters")?.remove();
 
@@ -56,7 +56,6 @@ function createCategoryFilters() {
       <button data-category="sofa" class="cat-btn">Sofas</button>
       <button data-category="other" class="cat-btn">Other</button>
     </div>
-
     <select id="sortSelect" class="sort-select">
       <option value="default">Sort by</option>
       <option value="price-low">Price: Low to High</option>
@@ -74,10 +73,11 @@ function createCategoryFilters() {
 
     let filtered = allProducts;
 
-    // Category filter
+    // Category filter — uses p.category (Column F)
     if (category !== "all") {
       filtered = allProducts.filter(p => 
-        p.title?.toLowerCase().includes(category)
+        p.category?.toLowerCase() === category || 
+        p.category?.toLowerCase().includes(category)
       );
     }
 
@@ -104,7 +104,7 @@ function createCategoryFilters() {
   // Sort dropdown
   sortSelect.addEventListener("change", applyFiltersAndSort);
 
-  // Initial load
+  // Initial apply
   applyFiltersAndSort();
 }
 
