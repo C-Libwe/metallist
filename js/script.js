@@ -18,109 +18,98 @@ function addToCart(product) {
   alert(`${product.title} added to cart!`);
 }
 
-// =============== DISPLAY PRODUCTS — BULLETPROOF IMAGE LOADING ===============
+// =============== DISPLAY PRODUCTS — ORIGINAL STYLE ===============
 function displayProducts(products) {
-  if (!products || products.length === 0) {
-    productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:100px;color:#666;font-size:1.2rem;">No products found.</p>`;
+  if (products.length === 0) {
+    productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:80px;color:#666;">No products found. Try another search.</p>`;
     return;
   }
 
-  productGrid.innerHTML = products.map(row => {
-    const title = row[0]?.toString().trim() || "Untitled Product";
-    const rawImage = row[1]?.toString().trim();
-    const price = parseFloat(row[3] || 0);
-    const category = (row[5]?.toString().trim() || "other").toLowerCase();
-
-    // Double fallback image
-    const fallbackImage = "https://via.placeholder.com/300x240/eeeeee/999999?text=No+Image";
-    const finalImage = rawImage && rawImage.includes("http") ? rawImage : fallbackImage;
-
-    return `
-      <div class="shop-link" data-category="${category}">
-        <div class="image-container">
-          <img src="${finalImage}" 
-               alt="${title}" 
-               loading="lazy"
-               onerror="this.onerror=null; this.src='${fallbackImage}'; this.style.opacity='0.8';">
-        </div>
-        <h3>${title}</h3>
-        <div class="price">${price.toLocaleString()} MKW</div>
-        <div class="btn-group">
-          <button onclick="addToCart({title:'${title.replace(/'/g, "\\'")}', price:'${price}', image:'${finalImage}'})">
-            Add to Cart
-          </button>
-          <a href="product-detail.html?title=${encodeURIComponent(title)}">View Details</a>
-        </div>
-      </div>
-    `;
-  }).join("");
+  productGrid.innerHTML = products.map(p => `
+    <div class="shop-link">
+      <h3>${p.title || "Untitled"}</h3>
+      <img src="${p.image}" alt="${p.title}" loading="lazy"
+           onerror="this.src='https://via.placeholder.com/300x240/ccc/666?text=No+Image'">
+      <div class="price">${parseFloat(p.price || 0).toLocaleString()} MKW</div>
+      <button onclick="addToCart({title:'${p.title}', price:'${p.price}', image:'${p.image}'})">
+        Add to Cart
+      </button>
+      <a href="product-detail.html?title=${encodeURIComponent(p.title)}">View Details →</a>
+    </div>
+  `).join("");
 }
 
-// =============== CATEGORY FILTERS — WORKS WITH COLUMN F ===============
-function createCategoryFilters() {
-  document.querySelector(".category-filters")?.remove();
+// =============== SEARCH FUNCTION ===============
+function filterProducts() {
+  const query = searchInput.value.toLowerCase().trim();
+  let filtered = allProducts;
 
-  const filterDiv = document.createElement("div");
-  filterDiv.className = "category-filters";
-  filterDiv.innerHTML = `
+  if (query && !query.includes("under") && !query.includes("below")) {
+    filtered = allProducts.filter(p => p.title.toLowerCase().includes(query));
+  }
+
+  if (query.includes("under") || query.includes("below")) {
+    const match = query.match(/(\d+)/);
+    if (match) {
+      const maxPrice = parseInt(match[0]) * (query.includes("million") ? 1000000 : 1000);
+      filtered = allProducts.filter(p => parseFloat(p.price) <= maxPrice);
+    }
+  }
+
+  displayProducts(filtered);
+}
+
+// =============== LOAD PRODUCTS — ORIGINAL + CATEGORY SUPPORT ===============
+async function loadProducts() {
+  try {
+    const res = await fetch(API_URL + "?t=" + Date.now());
+    if (!res.ok) throw new Error("Network error");
+    const products = await res.json();
+    allProducts = products;
+    displayProducts(allProducts);
+    saveCart(getCart()); // Update cart count
+  } catch (err) {
+    productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:#B12704;">
+      Connection issue – retrying in 10s…
+    </p>`;
+    setTimeout(loadProducts, 10000);
+  }
+}
+
+// =============== CATEGORY FILTERS — ADDED BACK ===============
+function createCategoryFilters() {
+  const filterContainer = document.createElement("div");
+  filterContainer.className = "category-filters";
+  filterContainer.innerHTML = `
     <button data-category="all" class="cat-btn active">All</button>
     <button data-category="table" class="cat-btn">Tables</button>
     <button data-category="bed" class="cat-btn">Beds</button>
     <button data-category="door" class="cat-btn">Doors</button>
     <button data-category="sofa" class="cat-btn">Sofas</button>
-    <button data-category="wardrobe" class="cat-btn">Wardrobes</button>
     <button data-category="other" class="cat-btn">Other</button>
   `;
-  productGrid.before(filterDiv);
+  productGrid.before(filterContainer);
 
-  filterDiv.addEventListener("click", (e) => {
-    const btn = e.target.closest(".cat-btn");
-    if (!btn) return;
+  filterContainer.addEventListener("click", (e) => {
+    if (!e.target.matches(".cat-btn")) return;
 
-    filterDiv.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
+    filterContainer.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
+    e.target.classList.add("active");
 
-    const cat = btn.dataset.category;
+    const category = e.target.dataset.category;
+    let filtered = allProducts;
 
-    document.querySelectorAll(".shop-link").forEach(card => {
-      const cardCat = card.dataset.category;
-      card.style.display = (cat === "all" || cardCat.includes(cat)) ? "block" : "none";
-    });
-  });
-}
-
-// =============== SEARCH ===============
-function filterProducts() {
-  const query = searchInput.value.toLowerCase().trim();
-
-  document.querySelectorAll(".shop-link").forEach(card => {
-    const title = card.querySelector("h3").textContent.toLowerCase();
-    card.style.display = title.includes(query) ? "block" : "none";
-  });
-}
-
-// =============== LOAD PRODUCTS ===============
-async function loadProducts() {
-  try {
-    const res = await fetch(API_URL + "?t=" + Date.now());
-    if (!res.ok) throw new Error("Check Google Apps Script Web App URL");
-    allProducts = await res.json();
-
-    if (!Array.isArray(allProducts) || allProducts.length === 0) {
-      productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:100px;color:#666;">Add products to your Google Sheet!</p>`;
-      return;
+    if (category !== "all") {
+      filtered = allProducts.filter(p => 
+        p.title.toLowerCase().includes(category)
+      );
     }
 
-    displayProducts(allProducts);
-    createCategoryFilters();
-
-  } catch (err) {
-    console.error("Load error:", err);
-    productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:100px;color:#B12704;">Failed to load products.<br>Please check your connection.</p>`;
-  }
+    displayProducts(filtered);
+  });
 }
 
 // =============== START ===============
 loadProducts();
-searchInput?.addEventListener("input", filterProducts);
+searchInput.addEventListener("input", filterProducts);
 setInterval(loadProducts, 120000);
