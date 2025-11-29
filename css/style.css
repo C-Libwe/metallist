@@ -44,19 +44,25 @@ header {
   flex-wrap: wrap;
 }
 
-.nav-logo img { height: 48px; }
-
-.nav-search {
-  flex: 1;
-  max-width: 600px;
-  height: 44px;
-  background: #f5f5f5;
-  border-radius: 50px;
-  overflow: hidden;
-  display: flex;
-  border: 1px solid #ddd;
+/* ==================== LOGO – BIG, BOLD & CLEAR ==================== */
+.nav-logo img {
+  height: 110px !important;     /* Much larger */
+  width: auto;
+  filter: brightness(0) invert(1); /* Pure white */
+  image-rendering: -webkit-optimize-contrast; /* Sharp on all screens */
+  transition: transform 0.3s ease;
 }
 
+.nav-logo img:hover {
+  transform: scale(1.05);
+}
+
+/* Mobile – still visible but not too big */
+@media (max-width: 768px) {
+  .nav-logo img {
+    height: 80px !important;
+  }
+}
 .search-input {
   flex: 1;
   border: none;
