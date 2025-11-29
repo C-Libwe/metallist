@@ -18,37 +18,37 @@ function addToCart(product) {
   alert(`${product.title} added to cart!`);
 }
 
-// =============== DISPLAY PRODUCTS — WORKS WITH ARRAY FORMAT ===============
+// =============== DISPLAY PRODUCTS — 100% RELIABLE ===============
 function displayProducts(products) {
   if (!products || products.length === 0) {
-    productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:100px;color:#666;font-size:1.3rem;">No products found.</p>`;
+    productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:100px;color:#666;">No products found.</p>`;
     return;
   }
 
   productGrid.innerHTML = products.map(row => {
-    const title = row[0] || "Untitled";
+    const title = row[0] || "Untitled Product";
     const image = row[1] || "https://via.placeholder.com/300x240/ccc/666?text=No+Image";
     const price = parseFloat(row[3] || 0);
-    const category = (row[5] || "").toString().toLowerCase();
+    const category = (row[5] || "other").toString().toLowerCase();
 
     return `
       <div class="shop-link" data-category="${category}">
-        <h3>${title}</h3>
         <img src="${image}" alt="${title}" loading="lazy"
              onerror="this.src='https://via.placeholder.com/300x240/ccc/666?text=No+Image'">
+        <h3>${title}</h3>
         <div class="price">${price.toLocaleString()} MKW</div>
         <div class="btn-group">
           <button onclick="addToCart({title:'${title}', price:'${price}', image:'${image}'})">
             Add to Cart
           </button>
-          <a href="product-detail.html?title=${encodeURIComponent(title)}">View Details</a>
+          <a href="product-detail.html?title=${encodeURIComponent(title)}">View Details →</a>
         </div>
       </div>
     `;
   }).join("");
 }
 
-// =============== CATEGORY FILTERS — 100% WORKING WITH COLUMN F ===============
+// =============== CATEGORY FILTERS — WORKS WITH COLUMN F ===============
 function createCategoryFilters() {
   document.querySelector(".category-filters")?.remove();
 
@@ -72,15 +72,11 @@ function createCategoryFilters() {
     filterDiv.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
 
-    const selected = btn.dataset.category;
+    const cat = btn.dataset.category;
 
     document.querySelectorAll(".shop-link").forEach(card => {
-      const cat = card.dataset.category;
-      if (selected === "all" || cat.includes(selected)) {
-        card.style.display = "block";
-      } else {
-        card.style.display = "none";
-      }
+      const cardCat = card.dataset.category;
+      card.style.display = (cat === "all" || cardCat.includes(cat)) ? "block" : "none";
     });
   });
 }
@@ -88,6 +84,7 @@ function createCategoryFilters() {
 // =============== SEARCH ===============
 function filterProducts() {
   const query = searchInput.value.toLowerCase().trim();
+
   document.querySelectorAll(".shop-link").forEach(card => {
     const title = card.querySelector("h3").textContent.toLowerCase();
     card.style.display = title.includes(query) ? "block" : "none";
@@ -98,11 +95,11 @@ function filterProducts() {
 async function loadProducts() {
   try {
     const res = await fetch(API_URL + "?t=" + Date.now());
-    if (!res.ok) throw new Error("Check Google Apps Script deployment");
+    if (!res.ok) throw new Error("Check Google Apps Script Web App URL");
     allProducts = await res.json();
 
     if (!Array.isArray(allProducts) || allProducts.length === 0) {
-      productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:100px;color:#666;">Add products to your Google Sheet!</p>`;
+      productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:100px;color:#666;">No products in sheet.</p>`;
       return;
     }
 
@@ -110,8 +107,8 @@ async function loadProducts() {
     createCategoryFilters();
 
   } catch (err) {
-    console.error(err);
-    productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:100px;color:#B12704;">Failed to load.<br>Check your API URL.</p>`;
+    console.error("Load error:", err);
+    productGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:100px;color:#B12704;">Failed to load products.<br>Please check your internet or API URL.</p>`;
   }
 }
 
