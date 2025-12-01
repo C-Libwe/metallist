@@ -44,7 +44,7 @@ header {
   flex-wrap: wrap;
 }
 
-.nav-logo img { height: 110px; }
+.nav-logo img { height: 180px; }
 
 .nav-search {
   flex: 1;
